@@ -1,94 +1,51 @@
 /* a comment */
 body {
     margin: 0;
-    padding: 0;
     font-family: Tahoma, Arial, sans-serif;
-    background-color: #f4f4f9;
-    color: blue; /* Retained from universal selector */
+    color: blue;
 }
 
 #main {
     max-width: 90%;
-    margin: 2rem auto;
-    padding: 1.5rem;
-    box-sizing: border-box;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin: 10px auto;
+    padding: 10px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    font-size: clamp(14px, 2.5vw, 16px); /* Responsive font size, based on 14px Tahoma */
-    line-height: 1.8;
+    font-size: 14px;
     text-align: center;
-    color: blue; /* Retained for main content */
 }
 
 #main img {
     max-width: 30%;
     width: 100%;
     height: auto;
-    display: block;
-    margin: 10px auto; /* Retained 10px margin */
-    border-radius: 50%;
-    border: 2px solid #007bff;
+    margin: 10px;
 }
 
 .subpage {
-    padding: 12px 24px;
-    margin: 10px; /* Retained 10px margin */
-    font-size: clamp(13px, 2vw, 15px);
+    margin: 10px;
+    padding: 10px 20px;
     font-family: Tahoma, Arial, sans-serif;
-    color: white; /* White text for contrast on button */
+    font-size: 14px;
+    color: white;
     background-color: #007bff;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    transition: transform 0.2s ease, background-color 0.3s ease;
-    text-transform: capitalize;
-}
-
-.subpage:hover {
-    background-color: #0056b3;
-    transform: scale(1.05);
 }
 
 .subpage:focus {
     outline: 2px solid #003087;
-    outline-offset: 2px;
 }
 
 p {
-    margin: 10px; /* Retained 10px margin */
-    max-width: 600px; /* Limit text width for readability */
+    margin: 10px;
+    max-width: 600px;
     font-family: Tahoma, Arial, sans-serif;
-    color: blue; /* Retained from universal selector */
 }
 
 @media (max-width: 600px) {
-    #main {
-        font-size: clamp(13px, 3vw, 15px);
-        padding: 1rem;
-        margin: 1rem;
-    }
-
     #main img {
-        max-width: 50%; /* Larger image on smaller screens */
-    }
-
-    .subpage {
-        padding: 10px 20px;
-        margin: 10px;
-    }
-}
-
-@media (min-width: 1200px) {
-    #main {
-        max-width: 80%;
-        font-size: clamp(15px, 2vw, 17px);
-    }
-
-    #main img {
-        max-width: 20%; /* Smaller image on larger screens */
+        max-width: 50%;
     }
 }
