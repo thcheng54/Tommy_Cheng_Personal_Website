@@ -49,3 +49,20 @@ p {
         max-width: 50%;
     }
 }
+
+p {
+    color: black;
+}
+
+button.subpage {
+    color: black;
+}
+
+.box {
+    display: flex;
+
+}
+
+.box div {
+    
+}
