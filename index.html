@@ -1,21 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<header>
-    <nav id="main">
-        <ul>
-            <p> Tommy CHENG</p>
-            <button class="subpage">About me</button>
-            <button class="subpage">Gallery</button>
-            <button id="cv" class="subpage">CV</button>
-        </ul>
-    </nav>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <title>Tommy Cheng Portfolio</title>
+</head>
+<body>
+    <header>
+        <nav id="main">
+            <ul>
+                <p>Tommy CHENG</p>
+                <li><button class="subpage" data-page="about">About Me</button></li>
+                <li><button class="subpage" data-page="gallery">Gallery</button></li>
+                <li><button class="subpage" data-page="cv">CV</button></li>
+            </ul>
+        </nav>
+    </header>
 
-    <div class="flex-container">
-        <img src="me.jpeg"/>
+    <section class="flex-container">
+        <img src="thcheng54.png" alt="Portrait of Tommy Cheng" class="profile-img" />
         <div class="text-container">
-            <h1>Welcome to my website!</h1>
-            <p> I am a student of City University of Hong Kong...</p>
-            <a class="intro_button" href=""">Follow me on Instargram</a>
+            <h1>Welcome to My Portfolio!</h1>
+            <p>Hi, I'm Tommy C, a Bachelor of Science in Creative Media student. I'm passionate about movies and design, with over six years of experience honing my drawing and editing skills. I'm currently pursuing a degree to further enhance my creative expertise.</p>
+            <a class="intro_button" href="https://www.instagram.com/your_instagram_username" target="_blank">Follow me on Instagram!</a>
         </div>
-    </div>
-</header>
+    </section>
+
+    <section class="grid-container">
+        <div id="my_work1" class="grid-item">My Work</div>
+        <div class="grid-item">My Work 2</div>
+        <div class="grid-item">My Work 3</div>
+    </section>
+
+    <section id="vis-scatterplot">
+        <h2>Creative Works Scatterplot</h2>
+    </section>
+
+    <section id="vis-skills">
+        <h2>My Skills Proficiency</h2>
+    </section>
+
+    <div class="tooltip" style="opacity: 0;"></div>
+
+    <script src="scatterplot.js"></script>
+    <script src="skills.js"></script>
+    <script src="code.js"></script>
+</body>
+</html>
