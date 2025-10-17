@@ -1,4 +1,5 @@
 // scatterplot.js
+(function(){
 const rawData = [
     { year: 2018, type: "Painting", count: 5 },
     { year: 2018, type: "Sculpture", count: 3 },
@@ -152,3 +153,5 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .text("Creative Works by Year and Type");
+
+})();

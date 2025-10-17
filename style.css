@@ -1,4 +1,9 @@
 /* style.css */
+
+html {
+    background-color: white;
+    scroll-behavior: smooth;
+}
 body {
     font-family: 'Inter', Arial, sans-serif;
     margin: 0;

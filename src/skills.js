@@ -1,4 +1,5 @@
 // skills.js
+(function(){
 const skillsData = [
     { skill: "Coding", score: 30 },
     { skill: "Video Editing", score: 70 },
@@ -99,3 +100,4 @@ svg.append("text")
     .attr("text-anchor", "middle")
     .style("font-size", "16px")
     .text("My Skills Proficiency");
+})();
