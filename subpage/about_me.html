@@ -2,9 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="../style.css" rel="stylesheet" />
-    <script src="https://d3js.org/d3.v7.min.js"></script>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tommy Cheng Adjacency Matrix</title>
     <style>
@@ -14,8 +11,8 @@
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            background-color: #f0f0f0;
-            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            font-family: 'Arial', sans-serif;
         }
         .container {
             max-width: 1200px;
@@ -24,35 +21,44 @@
         }
         h1 {
             font-size: 24px;
+            color: #1abc9c;
             margin-bottom: 20px;
+            font-weight: bold;
         }
         table {
             border-collapse: collapse;
             background: #fff;
-            border: 1px solid #333;
+            border: 2px solid #1abc9c;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             margin-bottom: 20px;
         }
         th, td {
-            border: 1px solid #333;
+            border: 1px solid #ddd;
             padding: 5px;
-            font-size: 10px;
             text-align: center;
             width: 40px;
             height: 40px;
+            transition: background-color 0.3s;
         }
         th {
-            background-color: #e0e0e0;
+            background-color: #e8f4f4;
             font-weight: bold;
+            color: #333;
         }
         th:first-child, td:first-child {
             width: 80px;
             text-align: left;
+            background-color: #d1ecec;
+        }
+        td {
+            background-color: #f5f5f5; /* Neutral color for 0 */
+            font-size: 0; /* Hide numbers */
         }
         td:hover {
-            background-color: #d0d0d0;
+            background-color: #e0f7f7;
             cursor: pointer;
         }
-        .central { background-color: #e74c3c; color: #fff; } /* Red for Tommy */
+        .personal { background-color: #e74c3c; color: #fff; } /* Red for Tommy */
         .education { background-color: #f1c40f; } /* Yellow for Education */
         .work { background-color: #3498db; } /* Blue for Work */
         .personality { background-color: #2ecc71; } /* Green for Personality */
@@ -63,26 +69,31 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 10px;
+            gap: 15px;
             background: #fff;
-            border: 1px solid #333;
+            border: 2px solid #1abc9c;
             padding: 10px;
-            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .legend div {
             display: flex;
             align-items: center;
             font-size: 12px;
+            color: #333;
         }
         .legend .color-box {
             width: 15px;
             height: 15px;
             margin-right: 5px;
+            border: 1px solid #ccc;
         }
         .description {
             font-size: 14px;
             text-align: left;
             max-width: 800px;
+            color: #444;
+            line-height: 1.6;
         }
     </style>
 </head>
@@ -109,500 +120,916 @@
                 <th title="BScCM, CityU (2021-Present)">BScCM</th>
                 <th title="Associate, CCCU (2019-2021)">Assoc</th>
                 <th title="DSE, 5 passes (2019)">DSE</th>
-                <th title="IKEA HK, Sales/Operations (2020-2024)">IKEA</th>
-                <th title="Cathay Pacific, Flight Attendant (2023)">Cathay</th>
-                <th title="NIKE Lab PS7, Sales (2019-2020)">NIKE</th>
-                <th title="iSignage, Support Engineer (2024-Present)">iSignage</th>
+                <th title="Chong Gene Hang College (2013-2019)">CGHC</th>
+                <th title="Panda Safari (2016-2018)">Panda</th>
+                <th title="IKEA Market Hall (2019)">IKEA1</th>
+                <th title="Comme des Garçons (2019)">CDG</th>
+                <th title="NIKE Lab PS7 (2019-2020)">NIKE</th>
+                <th title="Hoi Tin Athletic (2019-2020)">HTAA</th>
+                <th title="IKEA Show Room (2020-2022)">IKEA2</th>
+                <th title="IKEA Operations (2022-2024)">IKEA3</th>
+                <th title="Cathay Pacific (2023)">Cathay</th>
+                <th title="iSignage (2024-Present)">iSign</th>
                 <th title="Quick Learner">Quick</th>
                 <th title="Works Under Pressure">UnderP</th>
                 <th title="Adaptable">Adapt</th>
-                <th title="Video Competition Champion 2017">Video17</th>
-                <th title="Video Competition Champion 2016">Video16</th>
-                <th title="Talent Scholarship 2019">Schol</th>
-                <th title="Music Club Chairman (2017-2018)">Music</th>
-                <th title="Stage Manager, English Musical (2018-2019)">Stage</th>
-                <th title="Lasallian Youth Chairman (2016-2017)">Lasall</th>
-                <th title="Adobe Software (Premiere, Illustrator, Photoshop)">Adobe</th>
-                <th title="Languages (Cantonese, Mandarin, English)">Lang</th>
-                <th title="MS Office (Word, Excel, PowerPoint)">MSOff</th>
+                <th title="Calm">Calm</th>
+                <th title="Talent Scholarship (2019-2020)">Schol</th>
+                <th title="Video 2017 Champion">Vid17</th>
+                <th title="Video 2016 Champion">Vid16</th>
+                <th title="Influencers 2017-2018">Infl</th>
+                <th title="Music Chairman">Music</th>
+                <th title="Stage Manager">Stage</th>
+                <th title="Lasallian Youth">LasY</th>
+                <th title="Adobe Software">Adobe</th>
+                <th title="Languages">Lang</th>
+                <th title="MS Office">MSO</th>
             </tr>
             <tr>
                 <th title="Cheng Tsz Hin, Tommy">Tommy</th>
-                <td>0</td>
-                <td class="education one" title="Tommy to BScCM: Pursuing Creative Media degree">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="work one" title="Tommy to IKEA: Sales/Operations, 2020-2024">1</td>
-                <td class="work one" title="Tommy to Cathay Pacific: Flight Attendant, 2023">1</td>
-                <td class="work one" title="Tommy to NIKE: Sales, 2019-2020">1</td>
-                <td class="work one" title="Tommy to iSignage: Support Engineer, 2024-Present">1</td>
-                <td class="personality one" title="Tommy to Quick Learner: Core trait">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="activity one" title="Tommy to Video Award 2017: Lasallian Days Champion">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="leadership one" title="Tommy to Music Chairman: Leadership, 2017-2018">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="skill one" title="Tommy to Adobe: Premiere Pro, Illustrator, Photoshop">1</td>
-                <td class="skill one" title="Tommy to Languages: Cantonese, Mandarin, English">1</td>
-                <td>0</td>
+                <td></td>
+                <td class="education" title="Tommy to BScCM: Pursuing Creative Media"></td>
+                <td class="education" title="Tommy to Assoc: Completed Associate degree"></td>
+                <td class="education" title="Tommy to DSE: Achieved 5 passes"></td>
+                <td class="education" title="Tommy to CGHC: Secondary education"></td>
+                <td class="work" title="Tommy to Panda: Early work experience"></td>
+                <td class="work" title="Tommy to IKEA1: Sales role"></td>
+                <td class="work" title="Tommy to CDG: Sales role"></td>
+                <td class="work" title="Tommy to NIKE: Sales role"></td>
+                <td class="work" title="Tommy to HTAA: Assistance role"></td>
+                <td class="work" title="Tommy to IKEA2: Showroom role"></td>
+                <td class="work" title="Tommy to IKEA3: Operations role"></td>
+                <td class="work" title="Tommy to Cathay: Flight Attendant"></td>
+                <td class="work" title="Tommy to iSign: Support Engineer"></td>
+                <td class="personality" title="Tommy to Quick: Core trait"></td>
+                <td class="personality" title="Tommy to UnderP: Core trait"></td>
+                <td class="personality" title="Tommy to Adapt: Core trait"></td>
+                <td class="personality" title="Tommy to Calm: Core trait"></td>
+                <td class="activity" title="Tommy to Schol: Scholarship award"></td>
+                <td class="activity" title="Tommy to Vid17: Video competition win"></td>
+                <td class="activity" title="Tommy to Vid16: Video competition win"></td>
+                <td class="activity" title="Tommy to Infl: Influencers award"></td>
+                <td class="leadership" title="Tommy to Music: Leadership role"></td>
+                <td class="leadership" title="Tommy to Stage: Leadership role"></td>
+                <td class="leadership" title="Tommy to LasY: Leadership role"></td>
+                <td class="skill" title="Tommy to Adobe: 6+ years of practice"></td>
+                <td class="skill" title="Tommy to Lang: Multilingual skills"></td>
+                <td class="skill" title="Tommy to MSO: Office proficiency"></td>
             </tr>
             <tr>
                 <th title="BScCM, CityU (2021-Present)">BScCM</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="activity one" title="BScCM to Video Award 2017: Creative media skills led to award">1</td>
-                <td class="activity one" title="BScCM to Video Award 2016: Early creative skills led to award">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="skill one" title="BScCM to Adobe: Degree enhances creative skills">1</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="activity" title="BScCM to Vid17: Enhanced video skills"></td>
+                <td class="activity" title="BScCM to Vid16: Early video skills"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="skill" title="BScCM to Adobe: Degree enhances skills"></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th title="Associate, CCCU (2019-2021)">Assoc</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th title="DSE, 5 passes (2019)">DSE</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="IKEA HK, Sales/Operations (2020-2024)">IKEA</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="personality one" title="IKEA to Quick Learner: Retail required adaptability">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="skill one" title="IKEA to Adobe: Used design skills in showroom/operations">1</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Chong Gene Hang College (2013-2019)">CGHC</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="leadership" title="CGHC to Music: Leadership start"></td>
+                <td class="leadership" title="CGHC to Stage: Leadership start"></td>
+                <td class="leadership" title="CGHC to LasY: Leadership start"></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Cathay Pacific, Flight Attendant (2023)">Cathay</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="personality one" title="Cathay to Works Under Pressure: High-pressure role">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="skill one" title="Cathay to Languages: Language skills aided communication">1</td>
-                <td>0</td>
+                <th title="Panda Safari (2016-2018)">Panda</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="Panda to Quick: Early adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="NIKE Lab PS7, Sales (2019-2020)">NIKE</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="personality one" title="NIKE to Quick Learner: Sales required quick adaptation">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="IKEA Market Hall (2019)">IKEA1</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="IKEA1 to Quick: Sales adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="iSignage, Support Engineer (2024-Present)">iSignage</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="skill one" title="iSignage to Adobe: Used for digital signage content">1</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Comme des Garçons (2019)">CDG</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="CDG to Quick: Sales adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="NIKE Lab PS7 (2019-2020)">NIKE</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="NIKE to Quick: Sales adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="Hoi Tin Athletic (2019-2020)">HTAA</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="HTAA to Quick: Assistance adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="IKEA Show Room (2020-2022)">IKEA2</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="IKEA2 to Quick: Showroom adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="IKEA Operations (2022-2024)">IKEA3</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="IKEA3 to Quick: Operations adaptability"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="Cathay Pacific (2023)">Cathay</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="Cathay to UnderP: High-pressure role"></td>
+                <td></td>
+                <td class="personality" title="Cathay to Calm: Handling stress"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="skill" title="Cathay to Lang: Language use"></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="iSignage (2024-Present)">iSign</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="skill" title="iSign to Adobe: Digital signage"></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th title="Quick Learner">Quick</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th title="Works Under Pressure">UnderP</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
                 <th title="Adaptable">Adapt</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Video Competition Champion 2017">Video17</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="leadership one" title="Video Award 2017 to Music Chairman: Leadership in creative projects">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Calm">Calm</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Video Competition Champion 2016">Video16</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Talent Scholarship (2019-2020)">Schol</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Talent Scholarship 2019">Schol</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Video 2017 Champion">Vid17</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="leadership" title="Vid17 to Music: Leadership in video"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Music Club Chairman (2017-2018)">Music</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td class="personality one" title="Music Chairman to Quick Learner: Leadership required fast learning">1</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Video 2016 Champion">Vid16</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Stage Manager, English Musical (2018-2019)">Stage</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Influencers 2017-2018">Infl</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Lasallian Youth Chairman (2016-2017)">Lasall</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Music Chairman">Music</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="Music to Quick: Leadership learning"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Adobe Software (Premiere, Illustrator, Photoshop)">Adobe</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Stage Manager">Stage</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="Stage to Quick: Leadership learning"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="Languages (Cantonese, Mandarin, English)">Lang</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Lasallian Youth">LasY</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td class="personality" title="LasY to Quick: Leadership learning"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
             <tr>
-                <th title="MS Office (Word, Excel, PowerPoint)">MSOff</th>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
-                <td>0</td>
+                <th title="Adobe Software">Adobe</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="Languages">Lang</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th title="MS Office">MSO</th>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
             </tr>
         </table>
 
         <!-- Description -->
         <div class="description">
             <h2>Connections Explained</h2>
-            <p>This adjacency matrix represents a network of your profile, with nodes for you, education, work, personality, extracurricular activities, leadership, and skills. A '1' indicates a directed connection, colored by the destination node's category (e.g., BScCM column uses Education's yellow). Key connections include:</p>
+            <p>Welcome to the exploration of Tommy Cheng’s Adjacency Matrix! This interactive visual guide is designed to take you through the key connections in his CV, represented by nodes for himself, education, work experience, personality traits, extracurricular activities, leadership roles, and skills. A '1' in the matrix indicates a directed connection, with each link beautifully colored to reflect the destination node’s category—such as the vibrant yellow for BScCM under Education. Let us guide you through the highlights:</p>
             <ul>
-                <li><b>Tommy to BScCM, IKEA, Cathay, NIKE, iSignage</b>: Your academic and work experiences.</li>
-                <li><b>Tommy to Quick Learner, Video Award 2017, Music Chairman, Adobe, Languages</b>: Core traits, achievements, leadership, and skills.</li>
-                <li><b>BScCM to Adobe, Video Awards</b>: Your degree enhances creative skills and led to video competition wins.</li>
-                <li><b>IKEA to Adobe, Quick Learner</b>: Retail role used design skills and required adaptability.</li>
-                <li><b>Cathay to Languages, Works Under Pressure</b>: Flight attendant role relied on language skills and handling stress.</li>
-                <li><b>NIKE to Quick Learner</b>: Sales required quick adaptation.</li>
-                <li><b>iSignage to Adobe</b>: Support Engineer role uses Adobe for digital signage.</li>
-                <li><b>Video Award 2017 to Music Chairman</b>: Leadership in creative projects supported award.</li>
-                <li><b>Music Chairman to Quick Learner</b>: Leadership required fast learning.</li>
+                <li><b>Tommy to All Categories</b>: Begin your journey with Tommy at the center, the heart of this network, linking his education, work, and achievements into a cohesive story of growth and passion.</li>
+                <li><b>BScCM to Video Awards and Adobe</b>: Venture next to the City University’s Bachelor of Science in Creative Media, where his degree has nurtured his creative talents, leading to video competition victories and mastery of Adobe software.</li>
+                <li><b>Chong Gene Hang College to Leadership</b>: Step back to his school days at Chong Gene Hang College, a foundation that sparked his early leadership roles, setting the stage for future successes.</li>
+                <li><b>Work to Quick Learner</b>: Travel through his diverse work experiences—Panda Safari, IKEA, NIKE, and more—each role shaping his adaptability and quick learning, a trait that shines throughout.</li>
+                <li><b>Cathay to Languages, Calm, and Works Under Pressure</b>: Soar with his time at Cathay Pacific, where his multilingual skills, calm demeanor, and ability to thrive under pressure took flight.</li>
+                <li><b>iSignage to Adobe</b>: Land at his current role at iSignage Limited, where his expertise in Adobe software continues to flourish in digital signage support.</li>
+                <li><b>Video 2017 to Music Chairman</b>: Reflect on the 2017 Video Shooting Competition win, a triumph supported by his leadership as Music Chairman, blending creativity and guidance.</li>
+                <li><b>Leadership to Quick Learner</b>: Finally, explore how his leadership roles—Music Chairman, Stage Manager, and Lasallian Youth—honed his quick learning, a skill that echoes across his journey.</li>
             </ul>
+            <p>Take your time to hover over the matrix cells and headers to uncover detailed tooltips, and let the legend guide you through the color-coded categories. Enjoy this visual narrative of Tommy’s inspiring path!</p>
         </div>
     </div>
 </body>
