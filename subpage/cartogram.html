@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>HK Media Market Grid Cartogram</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+    h1 {
+      text-align: center;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(5, 100px);
+      grid-auto-rows: 100px;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+    .cell {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+    }
+    .tv { background-color: #1f77b4; }
+    .digital { background-color: #ff7f0e; }
+    .print { background-color: #2ca02c; }
+    .music { background-color: #d62728; }
+
+    .tooltip {
+      visibility: hidden;
+      width: 180px;
+      background-color: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 6px;
+      position: absolute;
+      z-index: 1;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 12px;
+    }
+
+    .cell:hover .tooltip {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    .legend {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      gap: 20px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .legend-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+    }
+
+    .back-button {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .back-button button {
+      background-color: #333;
+      color: white;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Hong Kong Media Market Grid Cartogram</h1>
+
+  <div class="back-button">
+    <a href="../index.html">
+      <button>⬅ Back to Home</button>
+    </a>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color tv"></div>TV & Video</div>
+    <div class="legend-item"><div class="legend-color digital"></div>Digital Advertising</div>
+    <div class="legend-item"><div class="legend-color print"></div>Print Media</div>
+    <div class="legend-item"><div class="legend-color music"></div>Music Streaming</div>
+  </div>
+
+  <div class="grid">
+    <div class="cell tv">TV<div class="tooltip">TV & Video: US$1.22B in 2025</div></div>
+    <div class="cell tv">TV<div class="tooltip">Dominant traditional segment</div></div>
+    <div class="cell tv">TV<div class="tooltip">Includes free-to-air and cable</div></div>
+    <div class="cell tv">TV<div class="tooltip">Facing digital disruption</div></div>
+
+    <div class="cell digital">Digital<div class="tooltip">Fastest-growing segment</div></div>
+    <div class="cell digital">Digital<div class="tooltip">Includes social, search, display</div></div>
+    <div class="cell digital">Digital<div class="tooltip">Mobile-first consumption</div></div>
+    <div class="cell digital">Digital<div class="tooltip">Programmatic and influencer marketing</div></div>
+    <div class="cell digital">Digital<div class="tooltip">Expected to surpass TV by 2030</div></div>
+    <div class="cell digital">Digital<div class="tooltip">Driven by e-commerce and video</div></div>
+
+    <div class="cell print">Print<div class="tooltip">Declining readership</div></div>
+    <div class="cell print">Print<div class="tooltip">Still strong in finance & legal</div></div>
+
+    <div class="cell music">Music<div class="tooltip">Small but growing</div></div>
+  </div>
+</body>
+</html>

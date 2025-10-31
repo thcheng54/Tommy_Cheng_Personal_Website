@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TC Flight Journey</title>
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+    <style>
+        #map { height: 100vh; width: 100%; }
+        .map-title, .map-summary {
+            background: rgba(255,255,255,0.9);
+            padding: 8px 12px;
+            font: bold 16px/1.4 Arial, sans-serif;
+            border-radius: 4px;
+            box-shadow: 0 0 5px rgba(0,0,0,0.3);
+            margin: 8px;
+        }
+        .map-title {
+            margin-left: 80px !important; /* Space for Back button */
+        }
+        .map-summary { font-size: 14px; line-height: 1.5; }
+        .country-label {
+            font-weight: bold;
+            font-size: 13px;
+            color: #1a1a1a;
+            text-shadow: 1px 1px 2px white;
+            pointer-events: none;
+        }
+
+        /* Back to Home Button (Leaflet Control Style) */
+        .back-home-control a {
+            display: block;
+            background: #1a73e8;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            padding: 8px 12px;
+            border-radius: 6px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            transition: background 0.3s ease;
+            min-width: 60px;
+        }
+        .back-home-control a:hover {
+            background: #1557b0;
+        }
+    </style>
+</head>
+<body>
+    <div id="map"></div>
+
+    <script>
+        // ---- Map initialisation -------------------------------------------------
+        const map = L.map('map');
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(map);
+
+        // ---- Back to Home Button (Leaflet Control) ------------------------------
+        const backControl = L.control({position: 'topleft'});
+        backControl.onAdd = function () {
+            const div = L.DomUtil.create('div', 'leaflet-control leaflet-control-custom back-home-control');
+            div.style.background = 'transparent';
+            div.style.margin = '10px';
+            div.innerHTML = '<a href="../index.html">Back to Home</a>';
+            L.DomEvent.disableClickPropagation(div);
+            return div;
+        };
+        backControl.addTo(map);
+
+        // ---- Title control ------------------------------------------------------
+        const titleControl = L.control({position: 'topleft'});
+        titleControl.onAdd = function () {
+            const div = L.DomUtil.create('div', 'map-title');
+            div.innerHTML = '<strong>My Flight Journey – Dot Density Map (2023‑2025)</strong>';
+            return div;
+        };
+        titleControl.addTo(map);
+
+        // ---- Locations with country names ---------------------------------------
+        const locations = {
+            'HKG': {lat: 22.308, lon: 113.918, count: 16, country: 'Hong Kong', labelOffset: [0, -15]},
+            'KUL': {lat: 2.746,  lon: 101.71,  count: 1,  country: 'Malaysia',    labelOffset: [0, -15]},
+            'XMN': {lat: 24.544, lon: 118.128, count: 2,  country: 'China',       labelOffset: [0, -15]},
+            'NKG': {lat: 31.732, lon: 118.863, count: 1,  country: 'China',       labelOffset: [0, -15]},
+            'LHR': {lat: 51.471, lon: -0.453,  count: 5,  country: 'United Kingdom', labelOffset: [0, -15]},
+            'KTM': {lat: 27.697, lon: 85.359,  count: 2,  country: 'Nepal',       labelOffset: [0, -15]},
+            'AMS': {lat: 52.309, lon: 4.764,   count: 2,  country: 'Netherlands', labelOffset: [0, -15]},
+            'BKK': {lat: 13.681, lon: 100.747, count: 2,  country: 'Thailand',    labelOffset: [0, -15]},
+            'TPE': {lat: 25.078, lon: 121.233, count: 1,  country: 'Taiwan',      labelOffset: [0, -15]}
+        };
+
+        const bounds = [];
+
+        // ---- Add dots, markers, and country labels -------------------------------
+        for (const code in locations) {
+            const loc = locations[code];
+            bounds.push([loc.lat, loc.lon]);
+
+            // === Dots for each visit ===
+            for (let i = 0; i < loc.count; i++) {
+                const offsetLat = (Math.random() - 0.5) * 0.05;
+                const offsetLon = (Math.random() - 0.5) * 0.05;
+
+                L.circleMarker([loc.lat + offsetLat, loc.lon + offsetLon], {
+                    radius: 4,
+                    color: 'blue',
+                    fillColor: 'blue',
+                    fillOpacity: 0.7
+                }).addTo(map)
+                  .bindPopup(`${code} (${loc.country})<br>${loc.count} visit${loc.count > 1 ? 's' : ''}`);
+            }
+
+            // === Airport marker ===
+            L.marker([loc.lat, loc.lon])
+                .addTo(map)
+                .bindPopup(`<b>${code}</b> – ${loc.country}`);
+
+            // === Country label (floating next to marker) ===
+            L.marker([loc.lat + loc.labelOffset[0]/100, loc.lon + loc.labelOffset[1]/100], {
+                icon: L.divIcon({
+                    className: 'country-label',
+                    html: loc.country,
+                    iconSize: [100, 20],
+                    iconAnchor: [0, 10]
+                })
+            }).addTo(map);
+        }
+
+        // ---- Travel Summary Panel ------------------------------------------------
+        const totalFlights = Object.values(locations).reduce((sum, l) => sum + l.count, 0);
+        const totalAirports = Object.keys(locations).length;
+        const uniqueCountries = new Set(Object.values(locations).map(l => l.country)).size;
+        const dates = [
+            '1/8/2023', '3/8/2023', '4/8/2023', '6/8/2023', '8/8/2023',
+            '15/8/2025', '21/8/2025', '8/8/2023', '19/8/2023', '23/8/2023',
+            '10/10/2023', '29/6/2025', '20/7/2024', '31/7/2024', '1/8/2024', '30/9/2025'
+        ];
+        const sortedDates = dates.map(d => {
+            const [day, month, year] = d.split('/');
+            return new Date(`${year}-${month.padStart(2,'0')}-${day.padStart(2,'0')}`);
+        });
+        const firstDate = new Date(Math.min(...sortedDates));
+        const lastDate  = new Date(Math.max(...sortedDates));
+        const formatDate = d => d.toLocaleDateString('en-GB', {day:'numeric', month:'short', year:'numeric'});
+
+        const summaryControl = L.control({position: 'bottomleft'});
+        summaryControl.onAdd = function () {
+            const div = L.DomUtil.create('div', 'map-summary');
+            div.innerHTML = `
+                <strong>Travel Summary</strong><br>
+                Airplane <strong>${totalFlights}</strong> flights<br>
+                Globe with meridians <strong>${uniqueCountries}</strong> countries<br>
+                Airport <strong>${totalAirports}</strong> airports<br>
+                Calendar ${formatDate(firstDate)} – ${formatDate(lastDate)}
+            `;
+            return div;
+        };
+        summaryControl.addTo(map);
+
+        // ---- Auto-zoom to fit all points ----------------------------------------
+        map.fitBounds(bounds, {padding: [50, 50]});
+    </script>
+</body>
+</html>

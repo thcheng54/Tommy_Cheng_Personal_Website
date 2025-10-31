@@ -5,7 +5,133 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="style.css" rel="stylesheet" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
+    <!-- Leaflet CSS & JS (only once) -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <title>Tommy Cheng Portfolio</title>
+
+    <!-- Matrix Styles -->
+    <style>
+        #vis-matrix .container {
+            max-width: 1200px;
+            padding: 20px;
+            text-align: center;
+        }
+        #vis-matrix h1 {
+            font-size: 24px;
+            color: #1abc9c;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        #vis-matrix table {
+            border-collapse: collapse;
+            background: #fff;
+            border: 2px solid #1abc9c;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            font-size: 0; /* Hide numbers */
+            table-layout: fixed;
+        }
+        #vis-matrix th, #vis-matrix td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        #vis-matrix th {
+            background-color: #e8f4f4;
+            font-weight: bold;
+            color: #333;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #vis-matrix th:first-child, #vis-matrix td:first-child {
+            width: 80px;
+            text-align: left;
+            background-color: #d1ecec;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #vis-matrix td {
+            background-color: #f5f5f5;
+        }
+        #vis-matrix td:hover {
+            background-color: #e0f7f7 !important;
+            cursor: pointer;
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+        .personal { background-color: #e74c3c !important; }
+        .education { background-color: #f1c40f !important; }
+        .work { background-color: #3498db !important; }
+        .personality { background-color: #2ecc71 !important; }
+        .activity { background-color: #9b59b6 !important; }
+        .leadership { background-color: #e67e22 !important; }
+        .skill { background-color: #1abc9c !important; }
+
+        #vis-matrix .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            background: #fff;
+            border: 2px solid #1abc9c;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #vis-matrix .legend div {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+        }
+        #vis-matrix .legend .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        #vis-matrix .description {
+            font-size: 14px;
+            text-align: center;
+            max-width: 800px;
+            margin: 1rem auto;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Responsive Matrix Wrapper */
+        .matrix-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        .matrix-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .matrix-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .matrix-wrapper::-webkit-scrollbar-thumb {
+            background: #1a73e8;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
     <header>
@@ -14,7 +140,9 @@
                 <p>Tommy CHENG</p>
                 <a class="subpage" href="#vis-skills">About Me</a>
                 <a class="subpage" href="subpage/my_work.html">My work</a>
-                <a class="subpage" href="subpage/about_me.html">Adjacency-Matrix</a>
+                <a class="subpage" href="#vis-matrix">Matrix</a>
+                <a class="subpage" href="#vis-map">DensityMap</a>
+                <a class="subpage" href="subpage/cartogram.html"> Skills Cartogram</a>
                 <a class="subpage" href="ChengTszHinTommyCV2024.pdf">CV</a>
             </ul>
         </nav>
@@ -47,11 +175,45 @@
         <h2>This is my education plot</h2>
     </section>
 
-    <div class="tooltip" style="opacity: 0;"></div>
+    <!-- Embedded + Clickable Flight Journey Map Section -->
+    <section id="vis-map" style="margin: 3rem auto; max-width: 1200px; padding: 0 1rem;">
+        <h2 style="text-align: center; margin-bottom: 1rem; cursor: pointer;">
+            <a href="subpage/my_visited_place.html" target="_blank"
+               style="color: inherit; text-decoration: none; display: block;">
+                My Flight Journey – Dot Density Map (2023‑2025)
+                <span style="font-size: 0.8em; color: #1a73e8; margin-left: 6px;">(open in new tab)</span>
+            </a>
+        </h2>
+        <div id="map" style="height: 600px; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+        <div id="map-summary" style="margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #555;"></div>
+    </section>
 
+    <!-- IMPROVED: Embedded + Clickable Matrix Section -->
+    <section id="vis-matrix" style="margin: 3rem auto; background: #f5f5f5; padding: 2rem 1rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; margin-bottom: 1rem; cursor: pointer;">
+            <a href="subpage/about_me.html" target="_blank"
+               style="color: inherit; text-decoration: none; display: block;">
+                Tommy Cheng Adjacency Matrix
+                <span style="font-size: 0.8em; color: #1a73e8; margin-left: 6px;">(open in new tab)</span>
+            </a>
+        </h2>
+        <div class="matrix-wrapper">
+            <div class="container"></div>
+        </div>
+        <div class="description">
+            Hover over any cell to see the connection. Each color represents a category of relationship.
+        </div>
+    </section>
+
+    <div class="tooltip" style="opacity: 0; position: absolute; background: rgba(0, 0, 0, 0.8); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 1000;"></div>
+
+    <!-- D3 Scripts -->
     <script src="src/scatterplot.js"></script>
     <script src="src/skills.js"></script>
     <script src="src/education.js"></script>
-    <script src="code.js"></script>
+    <script src="src/code.js"></script>
+    <script src="src/map.js"></script>
+    <script src="src/matrix.js"></script>
+
 </body>
 </html>
