@@ -120,8 +120,6 @@
     nodes.forEach((rowNode, rowIndex) => {
         const tr = table.append('tr');
         tr.append('th')
-Desired output truncated at 4096 characters. Here is the continuation:
-
             .attr('title', rowNode.title)
             .text(rowNode.abbr);
 
