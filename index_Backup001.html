@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <title>Tommy Cheng Portfolio 2025</title>
+
+    <style>
+        /* --- MATRIX STYLES --- */
+        #vis-matrix .container {
+            max-width: 1200px;
+            padding: 20px;
+            text-align: center;
+        }
+        #vis-matrix h1 {
+            font-size: 24px;
+            color: #1abc9c;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        #vis-matrix table {
+            border-collapse: collapse;
+            background: #fff;
+            border: 2px solid #1abc9c;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            font-size: 0; 
+            table-layout: fixed;
+        }
+        #vis-matrix th, #vis-matrix td {
+            border: 1px solid #ddd;
+            padding: 5px;
+            text-align: center;
+            width: 40px;
+            height: 40px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        #vis-matrix th {
+            background-color: #e8f4f4;
+            font-weight: bold;
+            color: #333;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #vis-matrix th:first-child, #vis-matrix td:first-child {
+            width: 80px;
+            text-align: left;
+            background-color: #d1ecec;
+            font-size: 11px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        #vis-matrix td {
+            background-color: #f5f5f5;
+        }
+        #vis-matrix td:hover {
+            background-color: #e0f7f7 !important;
+            cursor: pointer;
+            transform: scale(1.1);
+            z-index: 10;
+            box-shadow: 0 0 8px rgba(0,0,0,0.2);
+        }
+        .personal { background-color: #e74c3c !important; }
+        .education { background-color: #f1c40f !important; }
+        .work { background-color: #3498db !important; }
+        .personality { background-color: #2ecc71 !important; }
+        .activity { background-color: #9b59b6 !important; }
+        .leadership { background-color: #e67e22 !important; }
+        .skill { background-color: #1abc9c !important; }
+
+        #vis-matrix .legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 15px;
+            background: #fff;
+            border: 2px solid #1abc9c;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #vis-matrix .legend div {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #333;
+        }
+        #vis-matrix .legend .color-box {
+            width: 15px;
+            height: 15px;
+            margin-right: 5px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        #vis-matrix .description {
+            font-size: 14px;
+            text-align: center;
+            max-width: 800px;
+            margin: 1rem auto;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        /* Responsive Matrix Wrapper */
+        .matrix-wrapper {
+            overflow-x: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            margin-bottom: 1rem;
+        }
+        .matrix-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+        .matrix-wrapper::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+        .matrix-wrapper::-webkit-scrollbar-thumb {
+            background: #1a73e8;
+            border-radius: 4px;
+        }
+        
+        /* --- GRID STYLES (For My Work Section) --- */
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            margin-bottom: 3rem; 
+        }
+        .grid-item {
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .grid-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .grid-item a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            padding-bottom: 15px;
+        }
+        .grid-item img {
+            width: 100%;
+            height: 200px; 
+            object-fit: cover;
+            margin-bottom: 10px;
+        }
+        .grid-item h4 {
+            margin: 10px 0 5px;
+            color: #3498db;
+        }
+        .grid-item p {
+            font-size: 14px;
+            color: #555;
+            padding: 0 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav id="main">
+            <ul>
+                <p>Tommy CHENG</p>
+                <a class="subpage" href="#vis-skills">About Me</a>
+                <a class="subpage" href="subpage/my_work.html">My work</a>
+                <a class="subpage" href="#vis-matrix">Matrix</a>
+                <a class="subpage" href="#vis-map">DensityMap</a>
+                <a class="subpage" href="subpage/cartogram.html"> Skills Cartogram</a>
+                <a class="subpage" href="ChengTszHinTommyCV2024.pdf">CV</a>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="flex-container">
+        <img src="thcheng54.png" alt="Portrait of Tommy Cheng" class="profile-img" />
+        <div class="text-container">
+            <h1>Welcome to My Portfolio!</h1>
+            <p>Hi, I'm Tommy C, a Bachelor of Science in Creative Media student. I'm passionate about movies and design, with over six years of experience honing my drawing and editing skills. I'm currently pursuing a degree to further enhance my creative expertise.</p>
+            <a class="intro_button" href="https://www.instagram.com/tommy_cth220" target="_blank">Follow me on Instagram!</a>
+        </div>
+    </section>
+
+    <section class="grid-container">
+        
+        <div id="my_work1" class="grid-item">
+            <a href="subpage/project_butterfly.html" target="_blank">
+                <img src="image/thumb_butterfly.png" alt="Thumbnail for Butterfly Effect Story App" />
+                <h4>Butterfly Effect Story App</h4>
+                <p>Interactive horror story app based on classic tales, featuring 5 different endings based on user choices.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="subpage/project_time_travel.html" target="_blank">
+                <img src="image/thumb_time_travel.png" alt="Thumbnail for Time Travel video project" />
+                <h4>Time Travel (Short Film)</h4>
+                <p>A short film promoting the message of cherishing loved ones, featuring visual special effects and tracking.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="subpage/project_blame.html" target="_blank">
+                <img src="image/thumb_blame.png" alt="Thumbnail for 怨 (Blame) short film" />
+                <h4>怨 (Blame) Short Film</h4>
+                <p>A psychological story about a bullied student who develops a second personality to exact revenge.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="subpage/project_urbannoyance.html" target="_blank">
+                <img src="image/thumb_urbannoyance.png" alt="Thumbnail for Urbannoyance Installation" />
+                <h4>Urbannoyance Installation</h4>
+                <p>An installation designed to reconnect participants with nature amidst excessive urbanization and light pollution.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="subpage/project_a_peace_of_bun.html" target="_blank">
+                <img src="image/thumb_bun.png" alt="Thumbnail for A Peace of Bun installation" />
+                <h4>A Peace of Bun (Final Year Project)</h4>
+                <p>Interactive installation focused on the Cheung Chau Bun Festival to promote cultural connection.</p>
+            </a>
+        </div>
+    </section>
+
+    <section id="vis-scatterplot">
+        <h2>Creative Works Scatterplot</h2>
+    </section>
+
+    <section id="vis-scatterplot_animation">
+        <h2>Creative Works Scatterplot with animation version</h2>
+    </section>
+
+
+    <section id="vis-skills">
+        <h2>My Skills Proficiency</h2>
+    </section>
+
+    <section id="vis-education">
+        <h2>This is my education plot</h2>
+    </section>
+
+    <section id="vis-education_zoom">
+        <h2>This is my education plot with interactivity function</h2>
+    </section>
+
+    <section id="vis-timeline_animation">
+        <h2>Pending...</h2>
+    </section>
+
+    <section id="vis-map" style="margin: 3rem auto; max-width: 1200px; padding: 0 1rem;">
+        <h2 style="text-align: center; margin-bottom: 1rem; cursor: pointer;">
+            <a href="subpage/my_visited_place.html" target="_blank"
+               style="color: inherit; text-decoration: none; display: block;">
+                My Flight Journey – Dot Density Map (2023‑2025)
+                <span style="font-size: 0.8em; color: #1a73e8; margin-left: 6px;">(open in new tab)</span>
+            </a>
+        </h2>
+        <div id="map" style="height: 600px; border-radius: 1rem; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+        <div id="map-summary" style="margin-top: 1rem; text-align: center; font-size: 0.9rem; color: #555;"></div>
+    </section>
+
+    <section id="vis-matrix" style="margin: 3rem auto; background: #f5f5f5; padding: 2rem 1rem; border-radius: 1rem; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+        <h2 style="text-align: center; margin-bottom: 1rem; cursor: pointer;">
+            <a href="subpage/about_me.html" target="_blank"
+               style="color: inherit; text-decoration: none; display: block;">
+                Tommy Cheng Adjacency Matrix
+                <span style="font-size: 0.8em; color: #1a73e8; margin-left: 6px;">(open in new tab)</span>
+            </a>
+        </h2>
+        <div class="matrix-wrapper">
+            <div class="container"></div>
+        </div>
+        <div class="description">
+            Hover over any cell to see the connection. Each color represents a category of relationship.
+        </div>
+    </section>
+
+    <div class="tooltip" style="opacity: 0; position: absolute; background: rgba(0, 0, 0, 0.8); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 1000;"></div>
+
+    <script src="src/scatterplot.js"></script>
+    <script src="src/scatterplot_animation.js"></script>
+    <script src="src/skills.js"></script>
+    <script src="src/education.js"></script>
+    <script src="src/education_zoom.js"></script>
+    <script src="src/timeline_animation.js"></script>
+    <script src="src/code.js"></script>
+    <script src="src/map.js"></script>
+    <script src="src/matrix.js"></script>
+
+</body>
+</html>
