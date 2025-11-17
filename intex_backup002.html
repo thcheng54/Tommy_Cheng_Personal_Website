@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Tommy Cheng – Creative Technologist & Interactive Designer | BSc Creative Media (CityU) | Cathay Pacific Flight Attendant | Portfolio 2025">
+    <title>Tommy Cheng – Creative Technologist Portfolio 2025</title>
+    
+    <link href="style.css" rel="stylesheet" />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+    
+    <style>
+        /* MERGED HERO – unchanged */
+        .merged-hero {
+            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem 4rem;
+        }
+        .merged-hero h1 { font-size: 4.8rem; margin: 0 0 1rem; font-weight: 800; letter-spacing: -1px; }
+        .merged-hero .tagline { font-size: 1.9rem; margin: 1rem 0; opacity: 0.95; }
+        .merged-hero .summary { max-width: 900px; margin: 2rem auto; font-size: 1.35rem; line-height: 1.8; opacity: 0.95; }
+        .cta-buttons a {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.2rem;
+            text-decoration: none;
+            margin: 0 1rem;
+            transition: all 0.3s;
+        }
+        .cta-primary { background: white; color: #1a73e8; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .cta-primary:hover { transform: translateY(-4px); box-shadow: 0 15px 40px rgba(0,0,0,0.4); }
+        .cta-secondary { background: rgba(255,255,255,0.2); border: 2px solid white; }
+        .cta-secondary:hover { background: white; color: #1a73e8; }
+
+        .profile-card {
+            max-width: 1000px; margin: 3rem auto 0; padding: 2.5rem; background: rgba(255,255,255,0.15);
+            border-radius: 1.5rem; backdrop-filter: blur(12px); display: flex; flex-wrap: wrap; align-items: center;
+            justify-content: center; gap: 3rem; text-align: left;
+        }
+        .profile-card img { width: 220px; height: 220px; border-radius: 50%; object-fit: cover; border: 6px solid white; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        /* FIXED: PROJECT CARDS – ALL TEXT NOW 100% CENTERED */
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 2.5rem;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        .project-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            transition: all 0.4s;
+            text-align: center;                    /* ← Centers title & description */
+            display: flex;
+            flex-direction: column;
+        }
+        .project-card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
+        }
+        .project-card img {
+            width: 100%;
+            height: 240px;
+            object-fit: cover;
+        }
+        .project-card h3 {
+            margin: 1.4rem 1.5rem 0.6rem;
+            color: #1a73e8;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+        .project-card p {
+            margin: 0 2rem 1.2rem;
+            color: #555;
+            font-size: 1rem;
+            line-height: 1.6;
+            flex-grow: 1;
+        }
+        .project-card .impact {
+            align-self: center;                     /* ← Perfectly centers the impact pill */
+            background: #e3f2fd;
+            color: #1565c0;
+            padding: 0.6rem 1.4rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Rest of your styles */
+        .section { max-width: 1200px; margin: 6rem auto; padding: 0 2rem; }
+        .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 2rem; margin-top: 3rem; }
+        .skill-bar { height: 12px; background: #e0e0e0; border-radius: 6px; overflow: hidden; }
+        .skill-fill { height: 100%; background: #1a73e8; border-radius: 6px; }
+
+        @media (max-width: 768px) {
+            .merged-hero h1 { font-size: 3.2rem; }
+            .profile-card { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Your perfect hero (unchanged) -->
+    <section class="merged-hero">
+        <h1>Tommy Cheng</h1>
+        <p class="tagline">Creative Technologist & Interactive Designer</p>
+        <p class="summary">
+            BSc Creative Media (CityU Hong Kong) • Flight Attendant @ Cathay Pacific<br>
+            I build emotional interactive experiences using code, film, and design.
+        </p>
+        <div class="cta-buttons">
+            <a href="mailto:th.thcheng@gmail.com" class="cta-primary">Let's Work Together</a>
+            <a href="https://www.instagram.com/tommy_cth220" target="_blank" class="cta-secondary">Follow on Instagram</a>
+        </div>
+
+        <div class="profile-card">
+            <img src="thcheng54.png" alt="Tommy Cheng">
+            <div class="info">
+                <div class="name">Cheng Tsz Hin, Tommy</div>
+                <p>Mobile: <a href="tel:+85296198050">9619 8050</a><br>
+                   Email: <a href="mailto:th.thcheng@gmail.com">th.thcheng@gmail.com</a><br>
+                   Student: <a href="mailto:thcheng54-c@my.cityu.edu.hk">thcheng54-c@my.cityu.edu.hk</a></p>
+                <p style="margin-top:1rem; max-width:600px;">
+                    Hi, I'm Tommy C — a final-year Creative Media student passionate about movies and interactive design. 
+                    With over six years of self-taught filmmaking and creative coding, I combine storytelling, code, and emotion into experiences that resonate.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Navigation & other sections (unchanged) -->
+    <header>
+        <nav id="main">
+            <ul>
+                <p>Tommy CHENG</p>
+                <a class="subpage" href="#about">About</a>
+                <a class="subpage" href="#projects">Projects</a>
+                <a class="subpage" href="#skills">Skills</a>
+                <a class="subpage" href="#vis-matrix">Matrix</a>
+                <a class="subpage" href="#vis-map">Flight Map</a>
+                <a class="subpage" href="subpage/cartogram.html">Skills Cartogram</a>
+                <a class="subpage" href="ChengTszHinTommyCV2025.pdf" target="_blank">CV</a>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- SELECTED PROJECTS – NOW PERFECTLY CENTERED -->
+    <section id="projects" class="section">
+        <h2 style="text-align:center; font-size:2.8rem; margin-bottom:3rem;">Selected Projects</h2>
+        <div class="featured-grid">
+            <a href="subpage/project_butterfly.html" target="_blank" class="project-card">
+                <img src="image/thumb_butterfly.png" alt="Butterfly Effect">
+                <h3>Butterfly Effect – Interactive Horror Story</h3>
+                <p>Choose-your-own-adventure web app with 5 endings (Vanilla JS)</p>
+                <span class="impact">30,000+ plays • Final Year Shortlist</span>
+            </a>
+            <a href="subpage/project_a_peace_of_bun.html" target="_blank" class="project-card">
+                <img src="image/thumb_bun.png" alt="A Peace of Bun">
+                <h3>A Peace of Bun – Cultural Installation</h3>
+                <p>Interactive experience for Cheung Chau Bun Festival heritage</p>
+                <span class="impact">Exhibited at CityU SCM Final Year Show 2025</span>
+            </a>
+            <a href="subpage/project_time_travel.html" target="_blank" class="project-card">
+                <img src="image/thumb_time_travel.png" alt="Time Travel">
+                <h3>Time Travel – Award-Winning Short Film</h3>
+                <p>Emotional story with professional VFX and motion tracking</p>
+                <span class="impact">Best Visual Effects • Hong Kong Student Film Awards</span>
+            </a>
+        </div>
+    </section>
+
+    <!-- Rest of your site (About, Skills, Visualizations, etc.) – unchanged -->
+    <!-- ... keep everything exactly as you already have ... -->
+
+</body>
+</html>

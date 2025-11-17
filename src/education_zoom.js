@@ -129,6 +129,7 @@ const height = Math.min(minHeight, 1200); // Cap height at 1200px
 // Create SVG container with zoomable group
 const svg = d3.select("#vis-education_zoom")
     .style("position", "relative")
+    .style("overflow", "hidden")
     .append("svg")
     .attr("width", width + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
