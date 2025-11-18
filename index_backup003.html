@@ -12,83 +12,36 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
     
     <style>
-        .hero {
-            background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
-            color: white;
-            text-align: center;
-            padding: 6rem 2rem 4rem;
-        }
+        .hero { background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%); color: white; text-align: center; padding: 6rem 2rem 4rem; }
         .hero h1 { font-size: 4.5rem; margin: 0; font-weight: 800; letter-spacing: -1px; }
         .hero .tagline { font-size: 1.9rem; margin: 1rem 0; opacity: 0.95; }
         .hero .summary { max-width: 900px; margin: 2rem auto; font-size: 1.35rem; line-height: 1.8; opacity: 0.95; }
-        .hero .cta { 
-            display: inline-block; background: white; color: #1a73e8; 
-            padding: 1rem 2.5rem; border-radius: 50px; font-weight: 700; font-size: 1.2rem;
-            text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s;
-        }
+        .hero .cta { display: inline-block; background: white; color: #1a73e8; padding: 1rem 2.5rem; border-radius: 50px; font-weight: 700; font-size: 1.2rem;
+                     text-decoration: none; box-shadow: 0 10px 30px rgba(0,0,0,0.3); transition: all 0.3s; }
         .hero .cta:hover { transform: translateY(-4px); }
 
-        /* ABOUT ME – 100% MATCHES YOUR CV (including photo layout) */
-        #about {
-            max-width: 1100px;
-            margin: 4rem auto 6rem;
-            padding: 3rem 2rem;
-            background: white;
-            border-radius: 1.5rem;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 3rem;
-            align-items: flex-start;
-        }
-        #about img {
-            width: 180px;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 12px;
-            border: 5px solid #1a73e8;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
+        #about { max-width: 1100px; margin: 4rem auto 6rem; padding: 3rem 2rem; background: white; border-radius: 1.5rem;
+                 box-shadow: 0 10px 40px rgba(0,0,0,0.1); display: flex; flex-wrap: wrap; gap: 3rem; align-items: flex-start; }
+        #about img { width: 180px; height: 220px; object-fit: cover; border-radius: 12px; border: 5px solid #1a73e8; box-shadow: 0 8px 25px rgba(0,0,0,0.2); }
         #about .info { flex: 1; min-width: 300px; }
-        #about h2 { 
-            font-size: 2.8rem; color: #1a73e8; margin: 2rem 0 0.8rem; 
-            border-bottom: 3px solid #1a73e8; padding-bottom: 0.5rem; display: inline-block;
-        }
+        #about h2 { font-size: 2.8rem; color: #1a73e8; margin: 2rem 0 0.8rem; border-bottom: 3px solid #1a73e8; padding-bottom: 0.5rem; display: inline-block; }
         #about .contact { margin: 1.5rem 0; line-height: 2; font-size: 1.15rem; }
         #about .contact a { color: #1a73e8; text-decoration: none; font-weight: 500; }
-        #about .contact a:hover { text-decoration: underline; }
-        #about .instagram {
-            display: inline-flex; align-items: center; gap: 8px;
-            background: linear-gradient(135deg, #1a73e8, #1557b0);
-            color: white !important; padding: 0.5rem 1.2rem; border-radius: 50px;
-            font-size: 0.95rem; font-weight: 600; margin-left: 10px; transition: all 0.3s;
-        }
+        #about .instagram { display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #1a73e8, #1557b0);
+                            color: white !important; padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.95rem; font-weight: 600;
+                            margin-left: 10px; transition: all 0.3s; }
         #about .instagram:hover { transform: translateY(-2px); box-shadow: 0 6px 15px rgba(26,115,232,0.4); }
         #about p, #about ul { font-size: 1.15rem; line-height: 1.9; color: #444; }
         #about ul { padding-left: 1.5rem; margin: 1rem 0; }
         #about li { margin-bottom: 0.6rem; }
 
-        .featured-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-            gap: 2.5rem;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-        }
-        .project-card {
-            background: white; border-radius: 1rem; overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.12); transition: all 0.4s;
-            text-align: center;
-        }
+        .featured-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); gap: 2.5rem; max-width: 1400px; margin: 0 auto; padding: 0 1.5rem; }
+        .project-card { background: white; border-radius: 1rem; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.12); transition: all 0.4s; text-align: center; }
         .project-card:hover { transform: translateY(-15px); box-shadow: 0 25px 50px rgba(0,0,0,0.2); }
         .project-card img { width: 100%; height: 240px; object-fit: cover; }
         .project-card h3 { margin: 1.4rem 1.5rem 0.6rem; color: #1a73e8; font-size: 1.4rem; font-weight: 600; }
-        .project-card p { margin: 0 2rem 1.5rem; color: #555; font-size: 1rem; line-height: 1.6; }
-        .project-card .impact {
-            background: #e3f2fd; color: #1565c0; padding: 0.6rem 1.4rem; border-radius: 50px;
-            font-weight: 600; font-size: 0.9rem; display: inline-block; margin-bottom: 1.5rem;
-        }
+        .project-card p { margin: 0 2rem 1.2rem; color: #555; font-size: 1rem; line-height: 1.6; }
+        .project-card .impact { background: #e3f2fd; color: #1565c0; padding: 0.6rem 1.4rem; border-radius: 50px; font-weight: 600; font-size: 0.9rem; display: inline-block; margin-bottom: 1.5rem; }
 
         .section { max-width: 1200px; margin: 6rem auto; padding: 0 2rem; text-align: center; }
 
@@ -96,7 +49,6 @@
             .hero h1 { font-size: 3.2rem; }
             #about { flex-direction: column; text-align: center; padding: 2rem 1.5rem; }
             #about img { margin: 0 auto; }
-            #about h2 { text-align: center; }
         }
     </style>
 </head>
@@ -119,7 +71,7 @@
             <ul>
                 <p>Tommy CHENG</p>
                 <a href="#about">About</a>
-                <a href="subpage/personal_experience.html">Personal Experience</a>
+                <a href="subpage/personal_experience.html" target="_blank">Personal Experience</a>
                 <a href="#projects">Projects</a>
                 <a href="#vis-matrix">Matrix</a>
                 <a href="#vis-map">Flight Map</a>
@@ -129,58 +81,44 @@
         </nav>
     </header>
 
-    <!-- ABOUT ME – EXACTLY MATCHES YOUR CV (Nov 2025) -->
+    <!-- ABOUT ME – MATCHES YOUR CV 100% -->
     <section id="about">
-        <img src="image/thcheng54.png" alt="Cheng Tsz Hin, Tommy">
+        <img src="thcheng54.png" alt="Cheng Tsz Hin, Tommy">
 
         <div class="info">
             <h2>Personal Profile</h2>
             <div class="contact">
                 Mobile: <a href="tel:+85296198050">9619 8050</a> • 
                 Email: <a href="mailto:th.thcheng@gmail.com">th.thcheng@gmail.com</a><br>
-                Businese email: <a href="mailto:thcheng54-c@my.cityu.edu.hk">thcheng54-c@my.cityu.edu.hk</a> • 
+                Student: <a href="mailto:thcheng54-c@my.cityu.edu.hk">thcheng54-c@my.cityu.edu.hk</a> • 
                 <a href="https://www.instagram.com/tommy_cth220" target="_blank" class="instagram">
                     Instagram @tommy_cth220
                 </a>
             </div>
 
             <p>I am a student of Bachelor of Science in Creative Media. I am diligent and enthusiastic about movies and designs. Hence, I have been practicing my drawing and editing techniques for over 6 years. I am now studying a relevant degree programme that enables me to further enhance my skills and qualifications.</p>
+
+            <!-- CLICKABLE EDUCATION TITLE → opens new tab + auto-scrolls -->
             <h2 style="cursor: pointer;">
                 <a href="subpage/personal_experience.html#education" target="_blank" style="color: #1a73e8; text-decoration: none;">
                     Education 
+                    <span style="font-size: 0.7em; color: #1557b0; margin-left: 8px;">(click for full details)</span>
                 </a>
             </h2>
             <ul>
-                <li><strong>2021–Present</strong> City University of Hong Kong – Bachelor of Science in Creative Media (BScCM)</li>
-                <li><strong>2019–2021</strong> Community College of City University – Associate of Science in Creative and Interactive Media Production</li>
+                <li><strong>2021–Present</strong> City University of Hong Kong — Bachelor of Science in Creative Media (BScCM)</li>
+                <li><strong>2019–2021</strong> Community College of City University — Associate of Science in Creative and Interactive Media Production</li>
             </ul>
 
-            <h2 style="cursor: pointer;">
-                <a href="subpage/personal_experience.html#work_experience" target="_blank" style="color: #1a73e8; text-decoration: none;">
-                    Work Experience 
-                </a>
-            </h2>
-            <ul>
-                <li><strong>6/2023 – Present</strong> Cathay Pacific Airways Limited – Flight Attendant</li>
-                <li><strong>5/2019 – Present</strong> Various retail & customer service roles (IKEA, NIKE, Comme des Garçons, etc.)</li>
-                <li><strong>7/2016 – 9/2018</strong> Panda Safari Hong Kong – Travel Agent (Africa tour packages)</li>
-            </ul>
-
-            <h2 style="cursor: pointer;">
-                <a href="subpage/personal_experience.html#personalities" target="_blank" style="color: #1a73e8; text-decoration: none;">
-                    Personalities 
-                </a>
-            </h2>
-            <ul>
-                <li>A quick learner with keen eye for detail</li>
-                <li>Able to accomplish multiple tasks and to work under pressure</li>
-                <li>A motivated and adaptable team member</li>
-                <li>Can always take things calmly</li>
-            </ul>
+            <p style="margin-top: 2rem;">
+                <strong><a href="subpage/personal_experience.html" target="_blank" style="color:#1a73e8; text-decoration:none;">
+                    → Full Work Experience, Personalities & Leadership
+                </a></strong>
+            </p>
         </div>
     </section>
 
-    <!-- ALL 5 ORIGINAL PROJECTS RESTORED -->
+    <!-- ALL 5 PROJECTS -->
     <section id="projects" class="section">
         <h2 style="font-size:2.8rem; margin-bottom:3rem;">Selected Projects</h2>
         <div class="featured-grid">
@@ -197,7 +135,7 @@
                 <span class="impact">Best Visual Effects • Hong Kong Student Film Awards</span>
             </a>
             <a href="subpage/project_blame.html" target="_blank" class="project-card">
-                <img src="image/thumb_blame.png" alt="怨 Blame">
+                <img src="image/thumb_blame.png" alt="Blame">
                 <h3>怨 (Blame) – Psychological Short Film</h3>
                 <p>A bullied student develops a second personality for revenge</p>
             </a>
