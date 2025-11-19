@@ -29,122 +29,180 @@
             margin-top: 0; 
             font-size: 2.5em;
         }
-        
-        /* FINAL BUTTON STYLING (Guarantees Background Color) */
         .back-link { 
             display: inline-block; 
             margin-bottom: 20px; 
             text-decoration: none; 
-            
-            /* Button properties */
-            background-color: #1abc9c !important; /* Force teal background */
-            color: #ffffff !important; /* Force white text */
+            background-color: #1abc9c !important; 
+            color: #ffffff !important; 
             padding: 10px 20px; 
-            border: none; /* Ensure no border interferes */
             border-radius: 5px; 
             font-weight: bold; 
             font-size: 1em; 
-            cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .back-link:hover {
-            background-color: #16a085 !important; /* Darker teal on hover */
-        }
-        /* END BUTTON STYLING */
-        
-        /* Re-using the grid styles from index.html (ensure they are in style.css or copied here) */
+        .back-link:hover { background-color: #16a085 !important; }
+
         .grid-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 20px;
+            gap: 25px;
             padding: 20px;
             max-width: 1200px;
-            margin: 0 auto 50px; /* Added bottom margin */
+            margin: 0 auto 50px;
         }
         .grid-item {
             text-align: center;
             border: 1px solid #ddd;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
             overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: all 0.3s ease;
+            background: white;
         }
         .grid-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            transform: translateY(-8px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.12);
         }
         .grid-item a {
             text-decoration: none;
             color: inherit;
             display: block;
-            padding-bottom: 15px;
         }
         .grid-item img {
             width: 100%;
             height: 200px; 
             object-fit: cover;
-            margin-bottom: 10px;
         }
         .grid-item h4 {
-            margin: 10px 0 5px;
+            margin: 12px 0 6px;
             color: #3498db;
+            font-size: 1.2em;
         }
         .grid-item p {
             font-size: 14px;
             color: #555;
-            padding: 0 10px;
+            padding: 0 15px 15px;
+        }
+        .award-tag {
+            display: inline-block;
+            background: #e67e22;
+            color: white;
+            font-size: 0.8em;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin: 8px 0;
+        }
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            color: #2c3e50;
+            margin: 60px 20px 30px;
         }
     </style>
 </head>
 <body>
     
     <div class="header-container">
-        <a href="../index.html" class="back-link">&larr; Back to Portfolio</a>
+        <a href="../index.html" class="back-link">Back to Portfolio</a>
         <h1>My Creative Portfolio</h1>
-        <p>A collection of my five key creative media projects.</p>
+        <p>All my creative works from secondary school to university (2016–2025)</p>
     </div>
 
+    <!-- University & FYP Projects -->
+    <h2 class="section-title">University & Final Year Projects</h2>
     <section class="grid-container">
         
         <div class="grid-item">
-            <a href="project_butterfly.html" target="_blank">
-                <img src="../image/thumb_butterfly.png" alt="Thumbnail for Butterfly Effect Story App" />
+            <a href="project_butterfly.html">
+                <img src="../image/thumb_butterfly.png" alt="Butterfly Effect Story App" />
                 <h4>Butterfly Effect Story App</h4>
-                <p>Interactive horror story app based on classic tales, featuring 5 different endings based on user choices.</p>
+                <p>Interactive horror story app with 5 different endings based on user choices.</p>
             </a>
         </div>
 
         <div class="grid-item">
-            <a href="project_time_travel.html" target="_blank">
-                <img src="../image/thumb_time_travel.png" alt="Thumbnail for Time Travel video project" />
+            <a href="project_time_travel.html">
+                <img src="../image/thumb_time_travel.png" alt="Time Travel Short Film" />
                 <h4>Time Travel (Short Film)</h4>
-                <p>A short film promoting the message of cherishing loved ones, featuring visual special effects and tracking.</p>
+                <p>A touching short film with VFX about cherishing loved ones before it's too late.</p>
             </a>
         </div>
 
         <div class="grid-item">
-            <a href="project_blame.html" target="_blank">
-                <img src="../image/thumb_blame.png" alt="Thumbnail for 怨 (Blame) short film" />
+            <a href="project_blame.html">
+                <img src="../image/thumb_blame.png" alt="怨 (Blame)" />
                 <h4>怨 (Blame) Short Film</h4>
-                <p>A psychological story about a bullied student who develops a second personality to exact revenge.</p>
+                <p>Psychological thriller about bullying and split personality revenge.</p>
             </a>
         </div>
 
         <div class="grid-item">
-            <a href="project_urbannoyance.html" target="_blank">
-                <img src="../image/thumb_urbannoyance.png" alt="Thumbnail for Urbannoyance Installation" />
+            <a href="project_urbannoyance.html">
+                <img src="../image/thumb_urbannoyance.png" alt="Urbannoyance" />
                 <h4>Urbannoyance Installation</h4>
-                <p>An installation designed to reconnect participants with nature amidst excessive urbanization and light pollution.</p>
+                <p>Interactive light & sound installation reconnecting people with nature.</p>
             </a>
         </div>
 
         <div class="grid-item">
-            <a href="project_a_peace_of_bun.html" target="_blank">
-                <img src="../image/thumb_bun.png" alt="Thumbnail for A Peace of Bun installation" />
+            <a href="project_a_peace_of_bun.html">
+                <img src="../image/thumb_bun.png" alt="A Peace of Bun" />
                 <h4>A Peace of Bun (FYP)</h4>
-                <p>Interactive installation focused on the Cheung Chau Bun Festival to promote cultural connection.</p>
+                <p>Interactive cultural installation about Cheung Chau Bun Festival.</p>
             </a>
         </div>
+    </section>
+
+    <!-- Early Award-Winning Works -->
+    <h2 class="section-title">Early Award-Winning Video Works (2016–2019)</h2>
+    <section class="grid-container">
+
+        <div class="grid-item">
+            <a href="project_rthk30s.html">
+                <img src="../image/thumb_rthk30s.jpg" alt="越慶賀 越快樂？" />
+                <h4>越慶賀 越快樂？ (RTHK)</h4>
+                <div class="award-tag">RTHK 30s Competition 2018</div>
+                <p>Explores whether material celebrations truly bring happiness in Hong Kong.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="project_mtr.html">
+                <img src="../image/thumb_nisa39.jpg" alt="NISA39 港鐵陪伴我們成長" />
+                <h4>NISA39 – 港鐵陪伴我們成長</h4>
+                <div class="award-tag">The Next Influencers – Outstanding Work 2018</div>
+                <p>Romantic love story that began on opposite MTR platforms with comic-book visuals.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="project_hkta.html">
+                <img src="../image/thumb_breastfeeding.jpg" alt="哺乳媽媽 Miss Y 的煩惱" />
+                <h4>哺乳媽媽 Miss Y 的煩惱</h4>
+                <div class="award-tag">Hong Kong Teachers' Union – Champion 2018</div>
+                <p>Advocates for breastfeeding-friendly workplaces through a teacher's story.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="project_lasallian2017.html">
+                <img src="../image/thumb_peace2017.jpg" alt="International Lasallian Days for Peace 2017" />
+                <h4>Peace Video 2017</h4>
+                <div class="award-tag">Hong Kong Champion 2017</div>
+                <p>Champion entry promoting global peace and youth understanding.</p>
+            </a>
+        </div>
+
+        <div class="grid-item">
+            <a href="project_lasallian2016.html">
+                <img src="../image/thumb_peace2016.jpg" alt="International Lasallian Days for Peace 2016" />
+                <h4>Peace Video 2016</h4>
+                <div class="award-tag">Hong Kong Champion 2016</div>
+                <p>Back-to-back champion — powerful message of peace through youth voices.</p>
+            </a>
+        </div>
+
     </section>
 
 </body>
