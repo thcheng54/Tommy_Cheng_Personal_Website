@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tommy Cheng Tsz Hin – Journey & Connections</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      padding: 20px;
+      background: #f9f9fb;
+      color: #333;
+      margin: 0;
+      line-height: 1.6;
+    }
+    h1 { text-align: center; color: #2c3e50; font-size: 2.8rem; margin: 0 0 0.5rem 0; }
+    .subtitle {
+      display: block; text-align: center; font-size: 2.6rem; font-weight: 600;
+      color: #1a73e8; margin: 0 auto 2.5rem auto; padding: 8px 16px; border-radius: 12px;
+      position: relative;
+    }
+    .subtitle::after {
+      content: ''; position: absolute; width: 0; height: 4px; bottom: 8px; left: 50%;
+      background: #1a73e8; border-radius: 2px; transition: all 0.4s ease;
+      transform: translateX(-50%);
+    }
+    .subtitle:hover::after { width: 70%; }
+
+    .back-button { text-align: center; margin: 30px 0; }
+    .back-button button {
+      background: #1a73e8; color: white; padding: 12px 32px; font-size: 16px;
+      border: none; border-radius: 8px; cursor: pointer;
+      box-shadow: 0 8px 25px rgba(26,115,232,0.3); transition: all 0.3s;
+    }
+    .back-button button:hover { transform: translateY(-3px); }
+
+    /* Cartogram */
+    .grid {
+      display: grid; grid-template-columns: repeat(6, 100px); grid-auto-rows: 100px;
+      gap: 12px; justify-content: center; margin-top: 40px;
+    }
+    .cell {
+      position: relative; display: flex; align-items: center; justify-content: center;
+      color: white; font-weight: bold; font-size: 14px; border-radius: 10px;
+      text-align: center; cursor: pointer; box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      transition: transform 0.2s;
+    }
+    .cell:hover { transform: scale(1.05); }
+    .video    { background: #e74c3c; }
+    .design   { background: #9b59b6; }
+    .retail   { background: #3498db; }
+    .aviation { background: #1abc9c; }
+    .leader   { background: #f1c40f; }
+    .tech     { background: #34495e; }
+
+    .tooltip {
+      visibility: hidden; width: 260px; background: rgba(0,0,0,0.95); color: #fff;
+      text-align: center; border-radius: 8px; padding: 12px; position: absolute;
+      z-index: 10; bottom: 110%; left: 50%; transform: translateX(-50%);
+      opacity: 0; transition: opacity 0.3s; font-size: 13px; line-height: 1.5;
+    }
+    .cell:hover .tooltip { visibility: visible; opacity: 1; }
+
+    .legend {
+      display: flex; flex-wrap: wrap; justify-content: center;
+      margin: 40px 0 20px; gap: 20px; font-size: 15px;
+    }
+    .legend-item { display: flex; align-items: center; gap: 10px; }
+    .legend-color { width: 24px; height: 24px; border-radius: 6px; }
+
+    /* Flight Map */
+    #flight-map-section {
+      margin: 100px auto 40px; max-width: 1300px; padding: 0 1rem; text-align: center;
+    }
+    #flight-map-section h2, #matrix-section h2 {
+      font-size: 2.6rem; font-weight: 600; color: #1a73e8;
+      margin: 0 auto 1.5rem; padding: 8px 16px; border-radius: 12px;
+      display: inline-block; position: relative; cursor: default;
+    }
+    #flight-map-section h2::after, #matrix-section h2::after {
+      content: ''; position: absolute; width: 0; height: 4px; bottom: 8px; left: 50%;
+      background: #1a73e8; border-radius: 2px; transition: all 0.4s ease;
+      transform: translateX(-50%);
+    }
+    #flight-map-section h2:hover::after, #matrix-section h2:hover::after { width: 70%; }
+
+    #map { height: 680px; border-radius: 16px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.15); margin-top: 20px; }
+
+    /* Adjacency Matrix – Static & Beautiful (no dragging) */
+    #matrix-section { margin: 120px auto 80px; max-width: 1300px; padding: 0 1rem; text-align: center; }
+    #matrix-chart {
+      background: white; border-radius: 24px; padding: 50px 30px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.12); margin: 0 auto;
+    }
+    .node-label { font-size: 13px; font-weight: 600; fill: #222; text-anchor: middle; pointer-events: none; }
+    .link { stroke: #aaa; stroke-opacity: 0.45; stroke-width: 1.8; }
+  </style>
+</head>
+<body>
+
+  <h1>Tommy Cheng Tsz Hin</h1>
+  <div class="subtitle">Creative & Professional Journey Cartogram (2025)</div>
+
+  <div class="back-button">
+    <a href="../index.html"><button>Back to Portfolio Home</button></a>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color video"></div>Video & Filmmaking</div>
+    <div class="legend-item"><div class="legend-color design"></div>Design & Editing</div>
+    <div class="legend-item"><div class="legend-color retail"></div>Retail & Customer Experience</div>
+    <div class="legend-item"><div class="legend-color aviation"></div>Aviation (Cathay Pacific)</div>
+    <div class="legend-item"><div class="legend-color leader"></div>Leadership & Awards</div>
+    <div class="legend-item"><div class="legend-color tech"></div>Tech & Support Engineering</div>
+  </div>
+
+  <!-- Cartogram -->
+  <div class="grid">
+    <div class="cell video">Video<div class="tooltip">Lasallian Peace Video Champion 2016 & 2017</div></div>
+    <div class="cell video">Video<div class="tooltip">The Next Influencers 2017-2018<br>Outstanding Work (MTR)</div></div>
+    <div class="cell video">Video<div class="tooltip">My Mother Short Film Champion</div></div>
+    <div class="cell video">Video<div class="tooltip">BSc Creative Media @ CityU</div></div>
+    <div class="cell video">Video<div class="tooltip">6+ years directing & editing</div></div>
+
+    <div class="cell design">Design<div class="tooltip">Premiere Pro, After Effects<br>Photoshop, Illustrator</div></div>
+    <div class="cell design">Design<div class="tooltip">Motion Graphics & VFX</div></div>
+    <div class="cell design">Design<div class="tooltip">Visual Storytelling</div></div>
+
+    <div class="cell retail">Retail<div class="tooltip">IKEA HK 2020–2024<br>Store Operations</div></div>
+    <div class="cell retail">Retail<div class="tooltip">NIKE Lab & CdG 2019–2020</div></div>
+    <div class="cell retail">Retail<div class="tooltip">High-end Customer Service</div></div>
+
+    <div class="cell aviation">Flight<div class="tooltip">Cathay Pacific Flight Attendant 2023</div></div>
+    <div class="cell aviation">Flight<div class="tooltip">Safety & Service Under Pressure</div></div>
+
+    <div class="cell leader">Leader<div class="tooltip">Chairman of House, Music Club, Lasallian Youth</div></div>
+    <div class="cell leader">Leader<div class="tooltip">The Golden Crest Award</div></div>
+    <div class="cell leader">Leader<div class="tooltip">Stage Manager – English Musical</div></div>
+
+    <div class="cell tech">Tech<div class="tooltip">iSignage Support Engineer 2024–Present</div></div>
+    <div class="cell tech">Tech<div class="tooltip">Digital Signage Systems</div></div>
+  </div>
+
+  <!-- Flight Map -->
+  <section id="flight-map-section">
+    <h2 onclick="window.location.href='my_visited_place.html'">
+      My Flight Journey – Dot Density Map (2023‑2025)
+    </h2>
+    <div id="map"></div>
+  </section>
+
+  <!-- Adjacency Matrix – Static & Locked (No Dragging) -->
+  <section id="matrix-section">
+    <h2>Adjacency Matrix — How My Awards, Jobs, Skills & Roles Connect (2025)</h2>
+    <div id="matrix-chart"></div>
+  </section>
+
+  <!-- Leaflet Map Script -->
+  <script>
+    const map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const locations = {
+        'HKG': {lat: 22.308, lon: 113.918, count: 16, country: 'Hong Kong'},
+        'KUL': {lat: 2.746,  lon: 101.71,  count: 1,  country: 'Malaysia'},
+        'XMN': {lat: 24.544, lon: 118.128, count: 2,  country: 'China'},
+        'NKG': {lat: 31.732, lon: 118.863, count: 1,  country: 'China'},
+        'LHR': {lat: 51.471, lon: -0.453,  count: 5,  country: 'United Kingdom'},
+        'KTM': {lat: 27.697, lon: 85.359,  count: 2,  country: 'Nepal'},
+        'AMS': {lat: 52.309, lon: 4.764,   count: 2,  country: 'Netherlands'},
+        'BKK': {lat: 13.681, lon: 100.747, count: 2,  country: 'Thailand'},
+        'TPE': {lat: 25.078, lon: 121.233, count: 1,  country: 'Taiwan'}
+    };
+
+    const bounds = [];
+    for (const code in locations) {
+        const loc = locations[code];
+        bounds.push([loc.lat, loc.lon]);
+        for (let i = 0; i < loc.count; i++) {
+            const oLat = (Math.random() - 0.5) * 0.05;
+            const oLon = (Math.random() - 0.5) * 0.05;
+            L.circleMarker([loc.lat + oLat, loc.lon + oLon], {
+                radius: 5, color: '#1a73e8', fillColor: '#1a73e8', fillOpacity: 0.85
+            }).addTo(map).bindPopup(`${code} (${loc.country})<br>${loc.count} visit${loc.count > 1 ? 's' : ''}`);
+        }
+        L.marker([loc.lat, loc.lon]).addTo(map).bindPopup(`<b>${code}</b> – ${loc.country}`);
+        L.marker([loc.lat + 0.08, loc.lon], {icon: L.divIcon({className:'country-label', html:loc.country, iconSize:[100,40]})}).addTo(map);
+    }
+    map.fitBounds(bounds, {padding: [50, 50]});
+  </script>
+
+  <!-- D3 Adjacency Matrix – 100% Updated + No Dragging -->
+  <script>
+    const nodes = [
+      {id: "BSc Creative Media", group: "education"},
+      {id: "Lasallian Peace Video Champion 2016-17", group: "award"},
+      {id: "The Next Influencers 2017-18 (MTR)", group: "award"},
+      {id: "My Mother Short Film Champion", group: "award"},
+      {id: "The Golden Crest Award", group: "award"},
+      {id: "Talent Development Scholarship", group: "award"},
+      {id: "Cathay Pacific Flight Attendant", group: "work"},
+      {id: "iSignage Support Engineer", group: "work"},
+      {id: "IKEA HK Retail 2020-24", group: "work"},
+      {id: "NIKE Lab & CdG 2019-20", group: "work"},
+      {id: "Chairman of House", group: "leadership"},
+      {id: "Chairman of Music Club", group: "leadership"},
+      {id: "Stage Manager – English Musical", group: "leadership"},
+      {id: "Film Directing", group: "skill"},
+      {id: "Video Editing", group: "skill"},
+      {id: "Customer Service", group: "skill"},
+      {id: "Work Under Pressure", group: "skill"},
+      {id: "Leadership", group: "skill"},
+      {id: "Public Speaking", group: "skill"},
+      {id: "Creative Thinking", group: "skill"}
+    ];
+
+    const links = [
+      {source: "BSc Creative Media", target: "Film Directing", value: 10},
+      {source: "BSc Creative Media", target: "Video Editing", value: 10},
+      {source: "Lasallian Peace Video Champion 2016-17", target: "Film Directing", value: 9},
+      {source: "The Next Influencers 2017-18 (MTR)", target: "Video Editing", value: 9},
+      {source: "My Mother Short Film Champion", target: "Film Directing", value: 9},
+      {source: "The Golden Crest Award", target: "Leadership", value: 10},
+      {source: "Cathay Pacific Flight Attendant", target: "Work Under Pressure", value: 10},
+      {source: "Cathay Pacific Flight Attendant", target: "Customer Service", value: 10},
+      {source: "IKEA HK Retail 2020-24", target: "Customer Service", value: 9},
+      {source: "iSignage Support Engineer", target: "Creative Thinking", value: 8},
+      {source: "Chairman of House", target: "Leadership", value: 9},
+      {source: "Stage Manager – English Musical", target: "Public Speaking", value: 9},
+      {source: "Film Directing", target: "Creative Thinking", value: 10}
+    ];
+
+    const width = 1100, height = 1000;
+    const svg = d3.select("#matrix-chart").append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(140))
+      .force("charge", d3.forceManyBody().strength(-1000))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(60))
+      .stop(); // Stop simulation after layout
+
+    // Run simulation for 300 ticks (fixed layout)
+    for (let i = 0; i < 300; i++) simulation.tick();
+
+    const color = d3.scaleOrdinal()
+      .domain(["education","award","work","leadership","skill"])
+      .range(["#2ecc71","#e74c3c","#3498db","#f1c40f","#9b59b6"]);
+
+    // Links
+    svg.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("class", "link")
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y)
+      .attr("stroke-width", d => d.value * 0.8);
+
+    // Nodes
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .attr("transform", d => `translate(${d.x},${d.y})`);
+
+    node.append("circle")
+      .attr("r", d => d.group === "award" ? 30 : 24)
+      .attr("fill", d => color(d.group))
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 4);
+
+    node.append("text")
+      .text(d => d.id)
+      .attr("class", "node-label")
+      .attr("y", d => d.group === "award" ? 42 : 36);
+  </script>
+</body>
+</html>

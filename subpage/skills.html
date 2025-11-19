@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tommy Cheng Tsz Hin – Journey, Skills & Connections (2025)</title>
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- D3.js -->
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9fb;
+      color: #333;
+      line-height: 1.6;
+    }
+    h1 {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 3.2rem;
+      margin: 40px 0 8px;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #1a73e8;
+      margin-bottom: 40px;
+    }
+    .back-button {
+      text-align: center;
+      margin: 40px 0;
+    }
+    .back-button a {
+      background: #1a73e8;
+      color: white;
+      padding: 14px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-size: 1.1rem;
+      font-weight: 600;
+      box-shadow: 0 10px 30px rgba(26,115,232,0.3);
+      transition: all 0.3s;
+    }
+    .back-button a:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(26,115,232,0.4);
+    }
+
+    /* Legend */
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      margin: 40px 0;
+      font-size: 15px;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .legend-color {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+    }
+
+    /* Cartogram Grid */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 14px;
+      max-width: 1000px;
+      margin: 0 auto 80px;
+      padding: 0 20px;
+    }
+    .cell {
+      position: relative;
+      height: 100px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 14px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      transition: transform 0.2s;
+    }
+    .cell:hover { transform: scale(1.07); }
+    .video    { background: #e74c3c; }
+    .design   { background: #9b59b6; }
+    .retail   { background: #3498db; }
+    .aviation { background: #1abc9c; }
+    .leader   { background: #f1c40f; color: #222; }
+    .tech     { background: #34495e; }
+
+    .tooltip {
+      visibility: hidden;
+      width: 260px;
+      background: rgba(0,0,0,0.95);
+      color: #fff;
+      text-align: center;
+      border-radius: 8px;
+      padding: 12px;
+      position: absolute;
+      z-index: 10;
+      bottom: 110%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+    .cell:hover .tooltip { visibility: visible; opacity: 1; }
+
+    /* Section Titles - Perfectly Centered */
+    .section-title {
+      font-size: 2.6rem;
+      font-weight: 600;
+      color: #1a73e8;
+      text-align: center;
+      margin: 100px auto 50px;
+      display: table;
+      padding: 10px 24px;
+      border-radius: 12px;
+      position: relative;
+    }
+    .section-title::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 4px;
+      bottom: 10px;
+      left: 50%;
+      background: #1a73e8;
+      border-radius: 2px;
+      transition: all 0.4s ease;
+      transform: translateX(-50%);
+    }
+    .section-title:hover::after { width: 70%; }
+
+    /* Flight Map */
+    #flight-map-section, #matrix-section {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    #map {
+      height: 680px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+    }
+
+    /* Adjacency Matrix */
+    #matrix-chart {
+      background: white;
+      border-radius: 24px;
+      padding: 50px 30px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.12);
+    }
+    .node-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      fill: #222;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .link {
+      stroke: #aaa;
+      stroke-opacity: 0.5;
+      stroke-width: 1.8;
+    }
+    .matrix-tooltip {
+      position: absolute;
+      background: rgba(0,0,0,0.92);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 1000;
+      max-width: 300px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Tommy Cheng Tsz Hin</h1>
+  <div class="subtitle">Creative & Professional Journey (2025)</div>
+
+  <div class="back-button">
+    <a href="../index.html">Back to Portfolio Home</a>
+  </div>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-color video"></div>Video & Filmmaking</div>
+    <div class="legend-item"><div class="legend-color design"></div>Design & Editing</div>
+    <div class="legend-item"><div class="legend-color retail"></div>Retail & Customer Experience</div>
+    <div class="legend-item"><div class="legend-color aviation"></div>Aviation (Cathay Pacific)</div>
+    <div class="legend-item"><div class="legend-color leader"></div>Leadership & Awards</div>
+    <div class="legend-item"><div class="legend-color tech"></div>Tech & Support Engineering</div>
+  </div>
+
+  <!-- Cartogram -->
+  <div class="grid">
+    <div class="cell video">Video<div class="tooltip">Lasallian Peace Video Champion 2016 & 2017</div></div>
+    <div class="cell video">Video<div class="tooltip">The Next Influencers 2017-2018<br>Outstanding Work (MTR)</div></div>
+    <div class="cell video">Video<div class="tooltip">My Mother Short Film Champion</div></div>
+    <div class="cell video">Video<div class="tooltip">BSc Creative Media @ CityU</div></div>
+    <div class="cell video">Video<div class="tooltip">6+ years directing & editing</div></div>
+
+    <div class="cell design">Design<div class="tooltip">Premiere Pro, After Effects<br>Photoshop, Illustrator</div></div>
+    <div class="cell design">Design<div class="tooltip">Motion Graphics & VFX</div></div>
+    <div class="cell design">Design<div class="tooltip">Visual Storytelling</div></div>
+
+    <div class="cell retail">Retail<div class="tooltip">IKEA HK 2020–2024<br>Store Operations</div></div>
+    <div class="cell retail">Retail<div class="tooltip">NIKE Lab & CdG 2019–2020</div></div>
+    <div class="cell retail">Retail<div class="tooltip">High-end Customer Service</div></div>
+
+    <div class="cell aviation">Flight<div class="tooltip">Cathay Pacific Flight Attendant 2023</div></div>
+    <div class="cell aviation">Flight<div class="tooltip">Safety & Service Under Pressure</div></div>
+
+    <div class="cell leader">Leader<div class="tooltip">Chairman of House, Music Club, Lasallian Youth</div></div>
+    <div class="cell leader">Leader<div class="tooltip">The Golden Crest Award</div></div>
+    <div class="cell leader">Leader<div class="tooltip">Stage Manager – English Musical</div></div>
+
+    <div class="cell tech">Tech<div class="tooltip">iSignage Support Engineer 2024–Present</div></div>
+    <div class="cell tech">Tech<div class="tooltip">Digital Signage Systems</div></div>
+  </div>
+
+  <!-- Flight Map - Title Perfectly Centered -->
+  <section id="flight-map-section">
+    <h2 class="section-title" onclick="window.location.href='my_visited_place.html'">
+      My Flight Journey – Dot Density Map (2023‑2025)
+    </h2>
+    <div id="map"></div>
+  </section>
+
+  <!-- Adjacency Matrix - Title Perfectly Centered -->
+  <section id="matrix-section">
+    <h2 class="section-title" onclick="window.location.href='about_me_matrix.html'">Life & Career Connections – Interactive Adjacency Matrix (2025)</h2>
+    <div id="matrix-chart"></div>
+  </section>
+
+  <div class="back-button">
+    <a href="../index.html">Back to Portfolio Home</a>
+  </div>
+
+  <!-- Tooltip for Matrix -->
+  <div class="matrix-tooltip"></div>
+
+  <!-- Scripts -->
+  <script>
+    // ====== Leaflet Flight Map ======
+    const map = L.map('map').setView([20, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    const locations = {
+        'HKG': {lat: 22.308, lon: 113.918, count: 16, country: 'Hong Kong'},
+        'KUL': {lat: 2.746,  lon: 101.71,  count: 1,  country: 'Malaysia'},
+        'XMN': {lat: 24.544, lon: 118.128, count: 2,  country: 'China'},
+        'NKG': {lat: 31.732, lon: 118.863, count: 1,  country: 'China'},
+        'LHR': {lat: 51.471, lon: -0.453,  count: 5,  country: 'United Kingdom'},
+        'KTM': {lat: 27.697, lon: 85.359,  count: 2,  country: 'Nepal'},
+        'AMS': {lat: 52.309, lon: 4.764,   count: 2,  country: 'Netherlands'},
+        'BKK': {lat: 13.681, lon: 100.747, count: 2,  country: 'Thailand'},
+        'TPE': {lat: 25.078, lon: 121.233, count: 1,  country: 'Taiwan'}
+    };
+
+    const bounds = [];
+    for (const code in locations) {
+        const loc = locations[code];
+        bounds.push([loc.lat, loc.lon]);
+        for (let i = 0; i < loc.count; i++) {
+            const oLat = (Math.random() - 0.5) * 0.05;
+            const oLon = (Math.random() - 0.5) * 0.05;
+            L.circleMarker([loc.lat + oLat, loc.lon + oLon], {
+                radius: 5.5,
+                color: '#1a73e8',
+                fillColor: '#1a73e8',
+                fillOpacity: 0.9
+            }).addTo(map)
+              .bindPopup(`${code} (${loc.country})<br>${loc.count} visit${loc.count > 1 ? 's' : ''}`);
+        }
+        L.marker([loc.lat, loc.lon]).addTo(map).bindPopup(`<b>${code}</b> – ${loc.country}`);
+        L.marker([loc.lat + 0.08, loc.lon], {
+            icon: L.divIcon({className:'country-label', html: loc.country, iconSize:[120,40]})
+        }).addTo(map);
+    }
+    map.fitBounds(bounds, {padding: [50, 50]});
+  </script>
+
+  <script>
+    // ====== D3 Force-Directed Graph (Adjacency Matrix) ======
+    const nodes = [
+      {id: "BSc Creative Media", group: "education"},
+      {id: "CityU Hong Kong", group: "education"},
+      {id: "DSE-5 passes", group: "education"},
+      {id: "Golden Crest Award", group: "award"},
+      {id: "Lasallian Peace Video Champion 2016", group: "award"},
+      {id: "Lasallian Peace Video Champion 2017", group: "award"},
+      {id: "The Next Influencers 2017-2018\nOutstanding Work (MTR)", group: "award"},
+      {id: "My Mother Short Film Champion", group: "award"},
+      {id: "Talent Development Scholarship", group: "award"},
+      {id: "Cathay Pacific Flight Attendant", group: "work"},
+      {id: "IKEA HK Retail Group", group: "work"},
+      {id: "NIKE Lab PS7", group: "work"},
+      {id: "Comme des Garçons", group: "work"},
+      {id: "iSignage Limited\nSupport Engineer", group: "work"},
+      {id: "Panda Safari Travel Agent", group: "work"},
+      {id: "Chairman of House", group: "leadership"},
+      {id: "Chairman of Music Club", group: "leadership"},
+      {id: "Chairman of Lasallian Youth", group: "leadership"},
+      {id: "Stage Manager\nEnglish Musical Drama", group: "leadership"},
+      {id: "Film Directing", group: "skill"},
+      {id: "Video Editing", group: "skill"},
+      {id: "Premiere Pro", group: "skill"},
+      {id: "Photoshop & Illustrator", group: "skill"},
+      {id: "Customer Service", group: "skill"},
+      {id: "Work Under Pressure", group: "skill"},
+      {id: "Public Speaking", group: "skill"},
+      {id: "Creative Thinking", group: "skill"},
+      {id: "Leadership", group: "skill"},
+      {id: "Teamwork", group: "skill"}
+    ];
+
+    const links = [
+      {source: "BSc Creative Media", target: "Film Directing", value: 10},
+      {source: "BSc Creative Media", target: "Video Editing", value: 10},
+      {source: "BSc Creative Media", target: "Premiere Pro", value: 9},
+      {source: "BSc Creative Media", target: "Creative Thinking", value: 10},
+      {source: "Lasallian Peace Video Champion 2016", target: "Film Directing", value: 9},
+      {source: "Lasallian Peace Video Champion 2017", target: "Film Directing", value: 9},
+      {source: "The Next Influencers 2017-2018\nOutstanding Work (MTR)", target: "Video Editing", value: 8},
+      {source: "My Mother Short Film Champion", target: "Film Directing", value: 9},
+      {source: "Golden Crest Award", target: "Leadership", value: 10},
+      {source: "Cathay Pacific Flight Attendant", target: "Work Under Pressure", value: 10},
+      {source: "Cathay Pacific Flight Attendant", target: "Customer Service", value: 10},
+      {source: "IKEA HK Retail Group", target: "Customer Service", value: 9},
+      {source: "NIKE Lab PS7", target: "Customer Service", value: 8},
+      {source: "iSignage Limited\nSupport Engineer", target: "Premiere Pro", value: 7},
+      {source: "iSignage Limited\nSupport Engineer", target: "Creative Thinking", value: 8},
+      {source: "Chairman of House", target: "Leadership", value: 9},
+      {source: "Chairman of Music Club", target: "Public Speaking", value: 8},
+      {source: "Stage Manager\nEnglish Musical Drama", target: "Public Speaking", value: 9},
+      {source: "Stage Manager\nEnglish Musical Drama", target: "Teamwork", value: 9},
+      {source: "Chairman of Lasallian Youth", target: "Leadership", value: 9},
+      {source: "Film Directing", target: "Creative Thinking", value: 10},
+      {source: "Customer Service", target: "Teamwork", value: 8},
+      {source: "Leadership", target: "Public Speaking", value: 9},
+      {source: "Golden Crest Award", target: "Creative Thinking", value: 9}
+    ];
+
+    const width = 1100;
+    const height = 1000;
+
+    const svg = d3.select("#matrix-chart")
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(130))
+      .force("charge", d3.forceManyBody().strength(-900))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(55));
+
+    const color = d3.scaleOrdinal()
+      .domain(["education","award","work","leadership","skill"])
+      .range(["#2ecc71","#e74c3c","#3498db","#f1c40f","#9b59b6"]);
+
+    const link = svg.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("class", "link")
+      .attr("stroke-width", d => d.value * 0.8);
+
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+    node.append("circle")
+      .attr("r", d => d.group === "award" ? 28 : 22)
+      .attr("fill", d => color(d.group))
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 4);
+
+    node.append("text")
+      .text(d => d.id)
+      .attr("class", "node-label")
+      .attr("y", d => d.group === "award" ? 40 : 34);
+
+    const tooltip = d3.select(".matrix-tooltip");
+
+    node.on("mouseover", (event, d) => {
+      let desc = "";
+      if (d.group === "award") desc = "Award / Championship";
+      if (d.group === "work") desc = "Professional Experience";
+      if (d.group === "education") desc = "Education";
+      if (d.group === "leadership") desc = "Leadership Role";
+      if (d.group === "skill") desc = "Key Skill";
+
+      tooltip.html(`<strong>${d.id}</strong><br><em>${desc}</em>`)
+        .style("left", (event.pageX + 20) + "px")
+        .style("top", (event.pageY - 10) + "px")
+        .transition().duration(200).style("opacity", 1);
+    })
+    .on("mouseout", () => tooltip.transition().duration(400).style("opacity", 0));
+
+    simulation.on("tick", () => {
+      link.attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x; d.fy = d.y;
+    }
+    function dragged(event, d) {
+      d.fx = event.x; d.fy = event.y;
+    }
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null; d.fy = null;
+    }
+  </script>
+</body>
+</html>

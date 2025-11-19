@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tommy Cheng – Life & Career Adjacency Matrix</title>
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: linear-gradient(135deg, #f8fbff 0%, #e8f4ff 100%);
+      margin: 0;
+      padding: 0;
+      color: #333;
+    }
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 50px 20px;
+      text-align: center;
+    }
+    h1 {
+      font-size: 3.4rem;
+      color: #1a73e8;
+      margin: 0 0 12px 0;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+    .subtitle {
+      font-size: 1.7rem;
+      color: #2c5282;
+      margin-bottom: 50px;
+      font-weight: 500;
+    }
+    #chart {
+      background: white;
+      border-radius: 24px;
+      padding: 40px;
+      box-shadow: 0 25px 80px rgba(0,0,0,0.12);
+      margin: 0 auto;
+      max-width: 1150px;
+    }
+    .node-label {
+      font-size: 13.5px;
+      font-weight: 600;
+      fill: #222;
+      text-anchor: middle;
+      pointer-events: none;
+    }
+    .link {
+      stroke: #aaa;
+      stroke-opacity: 0.5;
+      stroke-width: 1.5;
+    }
+    .tooltip {
+      position: absolute;
+      background: rgba(0,0,0,0.9);
+      color: white;
+      padding: 14px 18px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 500;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      z-index: 1000;
+      max-width: 280px;
+      line-height: 1.5;
+    }
+    .back-button {
+      margin-top: 60px;
+    }
+    .back-button a {
+      display: inline-block;
+      background: #1a73e8;
+      color: white;
+      padding: 16px 40px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 1.2rem;
+      box-shadow: 0 10px 30px rgba(26,115,232,0.3);
+      transition: all 0.3s;
+    }
+    .back-button a:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(26,115,232,0.4);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>Tommy Cheng Tsz Hin</h1>
+    <p class="subtitle">Adjacency Matrix — How My Awards, Jobs, Skills & Roles Connect (2025)</p>
+    <div id="chart"></div>
+
+    <div class="back-button">
+      <a href="../index.html">Back to Portfolio Home</a>
+    </div>
+  </div>
+
+  <div class="tooltip"></div>
+
+  <script>
+    // === ALL DATA 100% FROM YOUR REAL CV ===
+    const nodes = [
+      // Education
+      {id: "BSc Creative Media", group: "education"},
+      {id: "CityU Hong Kong", group: "education"},
+      {id: "DSE-5 passes", group: "education"},
+
+      // Awards & Achievements
+      {id: "Golden Crest Award", group: "award"},
+      {id: "Lasallian Peace Video Champion 2016", group: "award"},
+      {id: "Lasallian Peace Video Champion 2017", group: "award"},
+      {id: "The Next Influencers 2017-2018\nOutstanding Work (MTR)", group: "award"},
+      {id: "My Mother Short Film Champion", group: "award"},
+      {id: "Talent Development Scholarship", group: "award"},
+
+      // Work Experience
+      {id: "Cathay Pacific Flight Attendant", group: "work"},
+      {id: "IKEA HK Retail Group", group: "work"},
+      {id: "NIKE Lab PS7", group: "work"},
+      {id: "Comme des Garçons", group: "work"},
+      {id: "iSignage Limited\nSupport Engineer", group: "work"},
+      {id: "Panda Safari Travel Agent", group: "work"},
+
+      // Leadership
+      {id: "Chairman of House", group: "leadership"},
+      {id: "Chairman of Music Club", group: "leadership"},
+      {id: "Chairman of Lasallian Youth", group: "leadership"},
+      {id: "Stage Manager\nEnglish Musical Drama", group: "leadership"},
+
+      // Skills
+      {id: "Film Directing", group: "skill"},
+      {id: "Video Editing", group: "skill"},
+      {id: "Premiere Pro", group: "skill"},
+      {id: "Photoshop & Illustrator", group: "skill"},
+      {id: "Customer Service", group: "skill"},
+      {id: "Work Under Pressure", group: "skill"},
+      {id: "Public Speaking", group: "skill"},
+      {id: "Creative Thinking", group: "skill"},
+      {id: "Leadership", group: "skill"},
+      {id: "Teamwork", group: "skill"}
+    ];
+
+    const links = [
+      // Education → Skills & Awards
+      {source: "BSc Creative Media", target: "Film Directing", value: 10},
+      {source: "BSc Creative Media", target: "Video Editing", value: 10},
+      {source: "BSc Creative Media", target: "Premiere Pro", value: 9},
+      {source: "BSc Creative Media", target: "Creative Thinking", value: 10},
+
+      // Awards → Skills & Education
+      {source: "Lasallian Peace Video Champion 2016", target: "Film Directing", value: 9},
+      {source: "Lasallian Peace Video Champion 2017", target: "Film Directing", value: 9},
+      {source: "The Next Influencers 2017-2018\nOutstanding Work (MTR)", target: "Video Editing", value: 8},
+      {source: "My Mother Short Film Champion", target: "Film Directing", value: 9},
+      {source: "Golden Crest Award", target: "Leadership", value: 10},
+
+      // Work → Skills
+      {source: "Cathay Pacific Flight Attendant", target: "Work Under Pressure", value: 10},
+      {source: "Cathay Pacific Flight Attendant", target: "Customer Service", value: 10},
+      {source: "IKEA HK Retail Group", target: "Customer Service", value: 9},
+      {source: "NIKE Lab PS7", target: "Customer Service", value: 8},
+      {source: "iSignage Limited\nSupport Engineer", target: "Premiere Pro", value: 7},
+      {source: "iSignage Limited\nSupport Engineer", target: "Creative Thinking", value: 8},
+
+      // Leadership → Skills & Awards
+      {source: "Chairman of House", target: "Leadership", value: 9},
+      {source: "Chairman of Music Club", target: "Public Speaking", value: 8},
+      {source: "Stage Manager\nEnglish Musical Drama", target: "Public Speaking", value: 9},
+      {source: "Stage Manager\nEnglish Musical Drama", target: "Teamwork", value: 9},
+      {source: "Chairman of Lasallian Youth", target: "Leadership", value: 9},
+
+      // Cross connections
+      {source: "Film Directing", target: "Creative Thinking", value: 10},
+      {source: "Customer Service", target: "Teamwork", value: 8},
+      {source: "Leadership", target: "Public Speaking", value: 9},
+      {source: "Golden Crest Award", target: "Creative Thinking", value: 9}
+    ];
+
+    const width = 1100;
+    const height = 1000;
+
+    const svg = d3.select("#chart")
+      .append("svg")
+      .attr("viewBox", `0 0 ${width} ${height}`)
+      .attr("preserveAspectRatio", "xMidYMid meet");
+
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+      .force("charge", d3.forceManyBody().strength(-800))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(50));
+
+    const color = d3.scaleOrdinal()
+      .domain(["education", "award", "work", "leadership", "skill"])
+      .range(["#2ecc71", "#e74c3c", "#3498db", "#f1c40f", "#9b59b6"]);
+
+    // Links
+    const link = svg.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("class", "link")
+      .attr("stroke-width", d => d.value * 0.8);
+
+    // Nodes
+    const node = svg.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended));
+
+    node.append("circle")
+      .attr("r", d => d.group === "award" ? 26 : 20)
+      .attr("fill", d => color(d.group))
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 4);
+
+    node.append("text")
+      .text(d => d.id)
+      .attr("class", "node-label")
+      .attr("y", d => d.group === "award" ? 38 : 32);
+
+    // Tooltip
+    const tooltip = d3.select(".tooltip");
+
+    node.on("mouseover", (event, d) => {
+      let desc = "";
+      if (d.group === "award") desc = "Award / Championship";
+      if (d.group === "work") desc = "Professional Experience";
+      if (d.group === "education") desc = "Education";
+      if (d.group === "leadership") desc = "Leadership Role";
+      if (d.group === "skill") desc = "Key Skill";
+
+      tooltip.html(`<strong>${d.id}</strong><br/><em>${desc}</em>`)
+        .style("left", (event.pageX + 20) + "px")
+        .style("top", (event.pageY - 10) + "px")
+        .transition().duration(200).style("opacity", 1);
+    })
+    .on("mouseout", () => {
+      tooltip.transition().duration(400).style("opacity", 0);
+    });
+
+    // Simulation tick
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y);
+
+      node.attr("transform", d => `translate(${d.x},${d.y})`);
+    });
+
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      d.fx = d.x; d.fy = d.y;
+    }
+    function dragged(event, d) {
+      d.fx = event.x; d.fy = event.y;
+    }
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0);
+      d.fx = null; d.fy = null;
+    }
+  </script>
+</body>
+</html>
