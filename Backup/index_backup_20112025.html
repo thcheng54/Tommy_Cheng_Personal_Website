@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Tommy Cheng – BSc Creative Media (CityU) | Cathay Pacific Flight Attendant | Portfolio 2025">
     <title>Tommy Cheng – Creative Technologist Portfolio 2025</title>
+    
     <link href="style.css" rel="stylesheet" />
     <script src="https://d3js.org/d3.v7.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin=""/>
@@ -62,8 +63,9 @@
     </style>
 </head>
 <body>
+
     <!-- HERO -->
-    <section id="head" section class="hero">
+    <section class="hero">
         <h1>Tommy Cheng</h1>
         <p class="tagline">Creative Technologist & Interactive Designer</p>
         <p class="summary">
@@ -72,7 +74,7 @@
         </p>
         <a href="mailto:th.thcheng@gmail.com" class="cta">Let's Work Together</a>
     </section>
-    
+
     <!-- NAVIGATION -->
     <header>
         <nav id="main">
@@ -201,8 +203,36 @@
                 <p style="margin:0 2rem 1.2rem; color:#555;">Explore every project in detail</p>
                 <span class="impact">Complete Portfolio</span>
             </a>
-            <a href="#head" class="cta">Go back...</a>
+
         </div>
     </section>
+
+    <!-- VISUALIZATIONS -->
+    <section id="vis-scatterplot"><h2>Creative Works Scatterplot</h2></section>
+    <section id="vis-scatterplot_animation"><h2>Creative Works Scatterplot (Animation)</h2></section>
+    <section id="vis-skills"><h2>My Skills Proficiency</h2></section>
+    <section id="vis-education"><h2>Education Journey</h2></section>
+    <section id="vis-education_zoom"><h2>Interactive Education Tree</h2></section>
+
+    <div class="tooltip" style="opacity: 0; position: absolute; background: rgba(0,0,0,0.8); color: #fff; padding: 8px 12px; border-radius: 6px; font-size: 12px; pointer-events: none; z-index: 1000;"></div>
+
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                if (a.getAttribute('href').startsWith('#')) {
+                    e.preventDefault();
+                    document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+
+    <script src="src/scatterplot.js"></script>
+    <script src="src/scatterplot_animation.js"></script>
+    <script src="src/skills.js"></script>
+    <script src="src/education.js"></script>
+    <script src="src/education_zoom.js"></script>
+    <script src="src/timeline_animation.js"></script>
+    <script src="src/code.js"></script>
 </body>
 </html>
